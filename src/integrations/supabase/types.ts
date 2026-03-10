@@ -14,7 +14,221 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      diagnostic_results: {
+        Row: {
+          answers: Json
+          assessed_level: number
+          created_at: string
+          id: string
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          assessed_level?: number
+          created_at?: string
+          id?: string
+          subject: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          assessed_level?: number
+          created_at?: string
+          id?: string
+          subject?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      progress_entries: {
+        Row: {
+          created_at: string
+          id: string
+          narrative: string
+          subject: string
+          teacher_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          narrative: string
+          subject: string
+          teacher_name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          narrative?: string
+          subject?: string
+          teacher_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      student_profiles: {
+        Row: {
+          age_group: string
+          calligraphy_level: number
+          created_at: string
+          display_name: string
+          id: string
+          math_level: number
+          onboarding_completed: boolean
+          reading_level: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age_group?: string
+          calligraphy_level?: number
+          created_at?: string
+          display_name?: string
+          id?: string
+          math_level?: number
+          onboarding_completed?: boolean
+          reading_level?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age_group?: string
+          calligraphy_level?: number
+          created_at?: string
+          display_name?: string
+          id?: string
+          math_level?: number
+          onboarding_completed?: boolean
+          reading_level?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      task_attempts: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          is_correct: boolean | null
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: string
+          is_correct?: boolean | null
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          is_correct?: boolean | null
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_attempts_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          completed_at: string | null
+          content: Json
+          created_at: string
+          difficulty: number
+          id: string
+          instruction: string
+          status: string
+          subject: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          content?: Json
+          created_at?: string
+          difficulty?: number
+          id?: string
+          instruction: string
+          status?: string
+          subject: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          content?: Json
+          created_at?: string
+          difficulty?: number
+          id?: string
+          instruction?: string
+          status?: string
+          subject?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      teacher_feedback: {
+        Row: {
+          attempt_id: string | null
+          created_at: string
+          feedback_text: string
+          feedback_type: string
+          id: string
+          subject: string
+          task_id: string | null
+          user_id: string
+        }
+        Insert: {
+          attempt_id?: string | null
+          created_at?: string
+          feedback_text: string
+          feedback_type?: string
+          id?: string
+          subject: string
+          task_id?: string | null
+          user_id: string
+        }
+        Update: {
+          attempt_id?: string | null
+          created_at?: string
+          feedback_text?: string
+          feedback_type?: string
+          id?: string
+          subject?: string
+          task_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_feedback_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "task_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_feedback_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
