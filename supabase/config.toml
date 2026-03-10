@@ -1,1 +1,4 @@
 project_id = "layllngsdzdejjxznnui"
+
+[functions.ai-teacher]
+verify_jwt = false
