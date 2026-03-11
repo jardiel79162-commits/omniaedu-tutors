@@ -10,224 +10,195 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
-      diagnostic_results: {
+      ai_summaries: {
         Row: {
-          answers: Json
-          assessed_level: number
-          created_at: string
+          chat_id: string
+          decisions: string[] | null
+          generated_at: string
           id: string
-          subject: string
+          important_messages: string[] | null
+          summary: string
+          tasks: string[] | null
+        }
+        Insert: {
+          chat_id: string
+          decisions?: string[] | null
+          generated_at?: string
+          id?: string
+          important_messages?: string[] | null
+          summary: string
+          tasks?: string[] | null
+        }
+        Update: {
+          chat_id?: string
+          decisions?: string[] | null
+          generated_at?: string
+          id?: string
+          important_messages?: string[] | null
+          summary?: string
+          tasks?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_summaries_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_members: {
+        Row: {
+          chat_id: string
+          id: string
+          joined_at: string
+          role: string
           user_id: string
         }
         Insert: {
-          answers?: Json
-          assessed_level?: number
-          created_at?: string
+          chat_id: string
           id?: string
-          subject: string
+          joined_at?: string
+          role?: string
           user_id: string
         }
         Update: {
-          answers?: Json
-          assessed_level?: number
-          created_at?: string
+          chat_id?: string
           id?: string
-          subject?: string
+          joined_at?: string
+          role?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "chat_members_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      progress_entries: {
+      chats: {
         Row: {
           created_at: string
+          created_by: string
           id: string
-          narrative: string
-          subject: string
-          teacher_name: string
-          user_id: string
+          is_group: boolean
+          name: string | null
+          security_level: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
+          created_by: string
           id?: string
-          narrative: string
-          subject: string
-          teacher_name: string
-          user_id: string
+          is_group?: boolean
+          name?: string | null
+          security_level?: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
+          created_by?: string
           id?: string
-          narrative?: string
-          subject?: string
-          teacher_name?: string
-          user_id?: string
+          is_group?: boolean
+          name?: string | null
+          security_level?: string
+          updated_at?: string
         }
         Relationships: []
       }
-      student_profiles: {
+      messages: {
         Row: {
-          age_group: string
-          calligraphy_level: number
+          chat_id: string
+          content: string
           created_at: string
-          display_name: string
           id: string
-          math_level: number
-          onboarding_completed: boolean
-          reading_level: number
+          message_type: string
+          self_destruct_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          chat_id: string
+          content: string
+          created_at?: string
+          id?: string
+          message_type?: string
+          self_destruct_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          chat_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          message_type?: string
+          self_destruct_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          ghost_mode: boolean
+          hide_online_status: boolean
+          hide_read_receipts: boolean
+          hide_typing_indicator: boolean
+          id: string
+          silent_mode: boolean
           updated_at: string
           user_id: string
+          username: string | null
         }
         Insert: {
-          age_group?: string
-          calligraphy_level?: number
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string
-          display_name?: string
+          display_name?: string | null
+          ghost_mode?: boolean
+          hide_online_status?: boolean
+          hide_read_receipts?: boolean
+          hide_typing_indicator?: boolean
           id?: string
-          math_level?: number
-          onboarding_completed?: boolean
-          reading_level?: number
+          silent_mode?: boolean
           updated_at?: string
           user_id: string
+          username?: string | null
         }
         Update: {
-          age_group?: string
-          calligraphy_level?: number
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string
-          display_name?: string
+          display_name?: string | null
+          ghost_mode?: boolean
+          hide_online_status?: boolean
+          hide_read_receipts?: boolean
+          hide_typing_indicator?: boolean
           id?: string
-          math_level?: number
-          onboarding_completed?: boolean
-          reading_level?: number
+          silent_mode?: boolean
           updated_at?: string
           user_id?: string
+          username?: string | null
         }
         Relationships: []
-      }
-      task_attempts: {
-        Row: {
-          answer: string
-          created_at: string
-          id: string
-          is_correct: boolean | null
-          task_id: string
-          user_id: string
-        }
-        Insert: {
-          answer: string
-          created_at?: string
-          id?: string
-          is_correct?: boolean | null
-          task_id: string
-          user_id: string
-        }
-        Update: {
-          answer?: string
-          created_at?: string
-          id?: string
-          is_correct?: boolean | null
-          task_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "task_attempts_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      tasks: {
-        Row: {
-          completed_at: string | null
-          content: Json
-          created_at: string
-          difficulty: number
-          id: string
-          instruction: string
-          status: string
-          subject: string
-          title: string
-          user_id: string
-        }
-        Insert: {
-          completed_at?: string | null
-          content?: Json
-          created_at?: string
-          difficulty?: number
-          id?: string
-          instruction: string
-          status?: string
-          subject: string
-          title: string
-          user_id: string
-        }
-        Update: {
-          completed_at?: string | null
-          content?: Json
-          created_at?: string
-          difficulty?: number
-          id?: string
-          instruction?: string
-          status?: string
-          subject?: string
-          title?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      teacher_feedback: {
-        Row: {
-          attempt_id: string | null
-          created_at: string
-          feedback_text: string
-          feedback_type: string
-          id: string
-          subject: string
-          task_id: string | null
-          user_id: string
-        }
-        Insert: {
-          attempt_id?: string | null
-          created_at?: string
-          feedback_text: string
-          feedback_type?: string
-          id?: string
-          subject: string
-          task_id?: string | null
-          user_id: string
-        }
-        Update: {
-          attempt_id?: string | null
-          created_at?: string
-          feedback_text?: string
-          feedback_type?: string
-          id?: string
-          subject?: string
-          task_id?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "teacher_feedback_attempt_id_fkey"
-            columns: ["attempt_id"]
-            isOneToOne: false
-            referencedRelation: "task_attempts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "teacher_feedback_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {

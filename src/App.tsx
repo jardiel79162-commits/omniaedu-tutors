@@ -1,74 +1,71 @@
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
-import { useStudentProfile } from "@/hooks/useStudentProfile";
-import Index from "./pages/Index.tsx";
-import TaskPage from "./pages/TaskPage.tsx";
-import ProgressPage from "./pages/ProgressPage.tsx";
-import TeacherRoom from "./pages/TeacherRoom.tsx";
-import AuthPage from "./pages/AuthPage.tsx";
-import OnboardingPage from "./pages/OnboardingPage.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import Login from "./pages/Login";
+import ChatList from "./pages/ChatList";
+import ChatView from "./pages/ChatView";
+import GhostMode from "./pages/GhostMode";
+import AISummary from "./pages/AISummary";
+import SearchPage from "./pages/SearchPage";
+import SettingsPage from "./pages/SettingsPage";
+import ProtocolZeroPage from "./pages/ProtocolZeroPage";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-function AppRoutes() {
-  const { user, loading: authLoading } = useAuth();
-  const { profile, loading: profileLoading } = useStudentProfile();
-
-  if (authLoading || (user && profileLoading)) {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-mentor animate-pulse" />
-          <span className="font-display text-sm text-muted-foreground">Carregando...</span>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
       </div>
     );
   }
+  return user ? <>{children}</> : <Navigate to="/" replace />;
+};
 
-  if (!user) {
-    return (
-      <Routes>
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="*" element={<Navigate to="/auth" replace />} />
-      </Routes>
-    );
-  }
+const AppRoutes = () => {
+  const [ghostMode, setGhostMode] = useState(false);
+  const { user, loading } = useAuth();
 
-  if (profile && !profile.onboarding_completed) {
+  if (loading) {
     return (
-      <Routes>
-        <Route path="/onboarding" element={<OnboardingPage />} />
-        <Route path="*" element={<Navigate to="/onboarding" replace />} />
-      </Routes>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
     );
   }
 
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/tarefa" element={<TaskPage />} />
-      <Route path="/progresso" element={<ProgressPage />} />
-      <Route path="/professor/:subject" element={<TeacherRoom />} />
+      <Route path="/" element={user ? <Navigate to="/chats" replace /> : <Login />} />
+      <Route path="/chats" element={<ProtectedRoute><ChatList ghostMode={ghostMode} /></ProtectedRoute>} />
+      <Route path="/chat/:id" element={<ProtectedRoute><ChatView ghostMode={ghostMode} /></ProtectedRoute>} />
+      <Route path="/ghost" element={<ProtectedRoute><GhostMode ghostMode={ghostMode} setGhostMode={setGhostMode} /></ProtectedRoute>} />
+      <Route path="/ai-summary" element={<ProtectedRoute><AISummary ghostMode={ghostMode} /></ProtectedRoute>} />
+      <Route path="/search" element={<ProtectedRoute><SearchPage ghostMode={ghostMode} /></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><SettingsPage ghostMode={ghostMode} /></ProtectedRoute>} />
+      <Route path="/protocol-zero" element={<ProtectedRoute><ProtocolZeroPage ghostMode={ghostMode} /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
-}
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <AppRoutes />
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );

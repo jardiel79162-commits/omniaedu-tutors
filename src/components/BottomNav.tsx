@@ -1,35 +1,73 @@
+import { MessageSquare, Ghost, Brain, ShieldOff, Search } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, BookOpen, TrendingUp } from "lucide-react";
+import { motion } from "framer-motion";
 
-export function BottomNav() {
+interface BottomNavProps {
+  ghostMode: boolean;
+}
+
+const BottomNav = ({ ghostMode }: BottomNavProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const items = [
-    { path: "/", icon: Home, label: "Início" },
-    { path: "/tarefa", icon: BookOpen, label: "Tarefa" },
-    { path: "/progresso", icon: TrendingUp, label: "Progresso" },
+    { icon: MessageSquare, label: "Chats", path: "/chats" },
+    { icon: Search, label: "Buscar", path: "/search" },
+    { icon: Ghost, label: "Ghost", path: "/ghost" },
+    { icon: Brain, label: "IA", path: "/ai-summary" },
+    { icon: ShieldOff, label: "Zero", path: "/protocol-zero" },
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border px-4 py-2 z-50">
-      <div className="max-w-lg mx-auto flex items-center justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border glass">
+      <div className="mx-auto flex max-w-lg items-center justify-around py-2">
         {items.map((item) => {
-          const active = location.pathname === item.path;
+          const isActive = location.pathname === item.path;
+          const isGhost = item.path === "/ghost" && ghostMode;
+
           return (
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center gap-1 py-2 px-4 rounded-lg transition-colors ${
-                active ? "text-primary" : "text-muted-foreground"
-              }`}
+              className="relative flex flex-col items-center gap-0.5 px-3 py-1.5 transition-colors"
             >
-              <item.icon size={20} strokeWidth={active ? 2.5 : 1.5} />
-              <span className="font-display text-[11px] font-medium">{item.label}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="nav-indicator"
+                  className={`absolute -top-2 h-0.5 w-8 rounded-full ${isGhost ? "bg-ghost" : "bg-primary"}`}
+                  style={{
+                    boxShadow: isGhost
+                      ? "0 0 10px hsl(180 100% 50% / 0.6)"
+                      : "0 0 10px hsl(130 100% 50% / 0.6)",
+                  }}
+                />
+              )}
+              <item.icon
+                className={`h-5 w-5 transition-colors ${
+                  isActive
+                    ? isGhost
+                      ? "text-ghost"
+                      : "text-primary"
+                    : "text-muted-foreground"
+                }`}
+              />
+              <span
+                className={`text-[10px] font-mono ${
+                  isActive
+                    ? isGhost
+                      ? "text-ghost"
+                      : "text-primary"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {item.label}
+              </span>
             </button>
           );
         })}
       </div>
     </nav>
   );
-}
+};
+
+export default BottomNav;

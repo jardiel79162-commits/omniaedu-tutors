@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Montserrat", "sans-serif"],
-        body: ["Lora", "serif"],
+        sans: ["Inter", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,22 +51,17 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        math: {
-          DEFAULT: "hsl(var(--math))",
-          foreground: "hsl(var(--math-foreground))",
-        },
-        calligraphy: {
-          DEFAULT: "hsl(var(--calligraphy))",
-          foreground: "hsl(var(--calligraphy-foreground))",
-        },
-        reading: {
-          DEFAULT: "hsl(var(--reading))",
-          foreground: "hsl(var(--reading-foreground))",
-        },
-        mentor: {
-          DEFAULT: "hsl(var(--mentor))",
-          foreground: "hsl(var(--mentor-foreground))",
-        },
+        neon: "hsl(var(--neon))",
+        ghost: "hsl(var(--ghost))",
+        "surface-1": "hsl(var(--surface-1))",
+        "surface-2": "hsl(var(--surface-2))",
+        "surface-3": "hsl(var(--surface-3))",
+        "priority-high": "hsl(var(--priority-high))",
+        "priority-medium": "hsl(var(--priority-medium))",
+        "priority-low": "hsl(var(--priority-low))",
+        "security-normal": "hsl(var(--security-normal))",
+        "security-private": "hsl(var(--security-private))",
+        "security-ultra": "hsl(var(--security-ultra))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -83,11 +78,6 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      boxShadow: {
-        soft: "var(--shadow-soft)",
-        card: "var(--shadow-card)",
-        elevated: "var(--shadow-elevated)",
-      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -97,20 +87,20 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "fade-in": {
-          from: { opacity: "0", transform: "translateY(8px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
+        pulse_neon: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
         },
-        "slide-in": {
-          from: { opacity: "0", transform: "translateX(16px)" },
-          to: { opacity: "1", transform: "translateX(0)" },
+        scan: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(100%)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.5s ease-out",
-        "slide-in": "slide-in 0.4s ease-out",
+        "pulse-neon": "pulse_neon 2s ease-in-out infinite",
+        scan: "scan 3s linear infinite",
       },
     },
   },
