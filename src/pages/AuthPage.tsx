@@ -4,8 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { BookOpen, Calculator, PenTool, Camera } from "lucide-react"; // Importar Camera icon
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
-// Hook personalizado para animaÃƒÂÃÂ§ÃÂÃÂ£o de criptografia contÃƒÂÃÂ­nua
+// Hook personalizado para animaÃÆÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o de criptografia contÃÆÃÂÃÂÃÂ­nua
 const useContinuousCrypticTextAnimation = (text: string, charInterval: number = 70, displayDuration: number = 2000) => {
   const [animatedText, setAnimatedText] = useState("");
   const [isEncrypting, setIsEncrypting] = useState(false);
@@ -108,6 +117,8 @@ const AuthPage = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [faceDetected, setFaceDetected] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const tagline = "Seus professores de inteligência artificial te esperam ✅";
   const animatedTagline = useContinuousCrypticTextAnimation(tagline);
@@ -132,6 +143,7 @@ const AuthPage = () => {
 
   const startCamera = async () => {
     setFaceDetected(false);
+    setIsModalOpen(true); // Abre o modal
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
@@ -139,11 +151,10 @@ const AuthPage = () => {
         videoRef.current.onloadedmetadata = () => {
           videoRef.current?.play();
           setIsCameraActive(true);
-          detectFaces();
         };
       }
     } catch (err) {
-      console.error("Erro ao acessar a câmera:", err);
+      console.error("Erro ao acessar a cÃ¢mera:", err);
       toast({ title: "Erro", description: "Não foi possível acessar a câmera. Verifique as permissões.", variant: "destructive" });
     }
   };
@@ -158,27 +169,31 @@ const AuthPage = () => {
     setIsCameraActive(false);
   };
 
-  const detectFaces = async () => {
+  const handleModalClose = () => {
+    stopCamera();
+    setIsModalOpen(false);
+  }
 
-    if (!videoRef.current) return;
+  const detectFacesInModal = async () => {
+    if (!videoRef.current || !isCameraActive) {
+      toast({ title: "Erro", description: "Câmera não está ativa.", variant: "destructive" });
+      return;
+    }
 
-    const interval = setInterval(async () => {
-      if (videoRef.current && videoRef.current.readyState === 4) { // Garante que o vídeo está pronto
-        // @ts-ignore
-        const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+    const detections = await faceapi
+      // @ts-ignore
+      .detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceExpressions();
 
-        if (detections.length > 0) {
-          setFaceDetected(true);
-          toast({ title: "Sucesso!", description: "Rosto detectado com sucesso.", variant: "success" });
-          clearInterval(interval);
-          stopCamera();
-        } else {
-          setFaceDetected(false);
-        }
-      }
-    }, 1000); // Tentar detectar a cada segundo
-
-    return () => clearInterval(interval);
+    if (detections.length > 0) {
+      setFaceDetected(true);
+      toast({ title: "Sucesso!", description: "Rosto detectado com sucesso.", variant: "success" });
+      stopCamera();
+      setIsModalOpen(false);
+    } else {
+      toast({ title: "Aviso", description: "Nenhum rosto detectado. Tente novamente.", variant: "warning" });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -188,11 +203,11 @@ const AuthPage = () => {
       if (isLogin) {
         await signIn(email, password);
       } else {
-        // if (!faceDetected) {
-        //   toast({ title: "Erro", description: "Por favor, complete a verificação facial.", variant: "destructive" });
-        //   setLoading(false);
-        //   return;
-        // }
+        if (!faceDetected) {
+          toast({ title: "Erro", description: "Por favor, complete a verificação facial.", variant: "destructive" });
+          setLoading(false);
+          return;
+        }
         await signUp(email, password, displayName);
         toast({ title: "Conta criada!", description: "Verifique seu e-mail para confirmar." });
       }
@@ -219,24 +234,52 @@ const AuthPage = () => {
         {!isLogin && (
           <>
             <Input placeholder="Seu nome" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required className="bg-christmas-input text-christmas-dark border-christmas-green placeholder:text-christmas-darker" />
-            <Button
-              type="button"
-              onClick={isCameraActive ? stopCamera : startCamera}
-              className="w-full bg-christmas-green hover:bg-christmas-green-dark text-white font-semibold flex items-center justify-center gap-2"
-            >
-              <Camera className="h-5 w-5" />
-              {isCameraActive ? "Parar Câmera" : "Reconhecimento Facial"}
-            </Button>
-            {isCameraActive && (
-              <div className="relative w-full h-48 bg-black rounded-md overflow-hidden flex items-center justify-center mt-2">
-                <video ref={videoRef} className="w-full h-full object-cover"></video>
-                {!faceDetected && <span className="absolute text-white text-sm">Procurando rosto...</span>}
-                {faceDetected && <span className="absolute text-green-400 text-lg font-bold">Rosto Detectado!</span>}
-              </div>
-            )}
-            {/* {faceDetected && !isCameraActive && (
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  onClick={startCamera}
+                  className="w-full bg-christmas-green hover:bg-christmas-green-dark text-white font-semibold flex items-center justify-center gap-2"
+                >
+                  <Camera className="h-5 w-5" />
+                  {faceDetected ? "Rosto Reconhecido!" : "Reconhecimento Facial"}
+                </Button>
+              </DialogTrigger>
+              <DialogContent onEscapeKeyDown={handleModalClose} onPointerDownOutside={handleModalClose}>
+                <DialogHeader>
+                  <DialogTitle>Reconhecimento Facial</DialogTitle>
+                  <DialogDescription>
+                    Posicione seu rosto na câmera e clique em "Reconhecer Rosto".
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="relative w-full h-64 bg-black rounded-md overflow-hidden flex items-center justify-center">
+                  <video ref={videoRef} className="w-full h-full object-cover"></video>
+                  {isCameraActive && !faceDetected && <span className="absolute text-white text-sm">Procurando rosto...</span>}
+                  {faceDetected && <span className="absolute text-green-400 text-lg font-bold">Rosto Detectado!</span>}
+                  {!isCameraActive && !faceDetected && <span className="absolute text-white text-sm">Aguardando câmera...</span>}
+                </div>
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    onClick={detectFacesInModal}
+                    className="bg-christmas-red hover:bg-christmas-red-dark text-white font-semibold"
+                    disabled={!isCameraActive || faceDetected}
+                  >
+                    Reconhecer Rosto
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleModalClose}
+                  >
+                    Cancelar
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            {faceDetected && (
               <p className="text-center text-sm text-green-400">Verificação facial concluída!</p>
-            )} */}
+            )}
           </>
         )}
         <Input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required className="bg-christmas-input text-christmas-dark border-christmas-green placeholder:text-christmas-darker" />
@@ -245,7 +288,7 @@ const AuthPage = () => {
           {loading ? "Noel estÃ¡ a caminho..." : isLogin ? "Entrar" : "Criar conta"}
         </Button>
         <p className="text-center text-sm text-christmas-darker">
-          {isLogin ? "NÃ£o tem conta? " : "JÃ¡ tem conta? "}
+          {isLogin ? "Não tem conta? " : "Já tem conta? "}
           <button type="button" className="font-semibold text-christmas-green hover:underline hover:text-christmas-red transition-colors duration-200" onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Criar conta" : "Entrar"}
           </button>
