@@ -68,8 +68,17 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+    background-size: 1400% 1400%;
+    animation: rainbow-background 20s ease infinite;
+    @apply text-foreground font-sans antialiased;
   }
+}
+
+@keyframes rainbow-background {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 @layer utilities {

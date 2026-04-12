@@ -65,7 +65,7 @@ const Login = () => {
         const isPanic = await isPanicPassword(password);
         if (isPanic) {
           await executeNuclearOption();
-          toast.error("Erro de autenticaÃ§Ã£o");
+          toast.error("Erro de autenticação");
           setLoading(false);
           return;
         }
@@ -87,7 +87,7 @@ const Login = () => {
   // Anonymous registration flow
   const handleCreateCode = () => {
     if (masterCodeInput.length !== 6) {
-      toast.error("O cÃ³digo deve ter 6 dÃ­gitos");
+      toast.error("O código deve ter 6 dígitos");
       return;
     }
     setAnonStep("confirm-code");
@@ -95,7 +95,7 @@ const Login = () => {
 
   const handleConfirmCode = () => {
     if (confirmCodeInput !== masterCodeInput) {
-      toast.error("Os cÃ³digos nÃ£o coincidem");
+      toast.error("Os códigos não coincidem");
       setConfirmCodeInput("");
       return;
     }
@@ -124,7 +124,7 @@ const Login = () => {
         }
       }
 
-      toast.success("Conta anÃ´nima criada com sucesso!");
+      toast.success("Conta anônima criada com sucesso!");
       navigate("/chats");
     } catch (err: any) {
       toast.error(err.message || "Erro ao criar conta");
@@ -143,11 +143,11 @@ const Login = () => {
         const isPanic = await isPanicPassword(masterCodeInput);
         if (isPanic) {
           await executeNuclearOption();
-          toast.error("Erro de autenticaÃ§Ã£o");
+          toast.error("Erro de autenticação");
           setLoading(false);
           return;
         }
-        toast.error("CÃ³digo mestre incorreto");
+        toast.error("Código mestre incorreto");
         setLoading(false);
         return;
       }
@@ -172,7 +172,7 @@ const Login = () => {
     try {
       const authenticated = await authenticateBiometric();
       if (!authenticated) {
-        toast.error("VerificaÃ§Ã£o biomÃ©trica falhou");
+        toast.error("Verificação biométrica falhou");
         setLoading(false);
         return;
       }
@@ -180,14 +180,14 @@ const Login = () => {
       toast.success("Acesso autorizado");
       navigate("/chats");
     } catch (err: any) {
-      toast.error(err.message || "Erro na autenticaÃ§Ã£o biomÃ©trica");
+      toast.error(err.message || "Erro na autenticação biométrica");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6">
       <div className="pointer-events-none absolute inset-0 scanline opacity-30" />
       <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 h-[400px] w-[400px] rounded-full bg-primary/5 blur-[120px]" />
 
@@ -208,12 +208,12 @@ const Login = () => {
             JTC <span className="text-primary ">Parker</span>
           </h1>
           <small className="mt-1 font-mono text-xs text-muted-foreground uppercase text-shadow-sm-primary">
-            ComunicaÃ§Ã£o Segura
+            Comunicação Segura
           </small>
         </div>
 
         {/* Mode Selector */}
-        <div className="mb-6 flex rounded-xl border border-border bg-surface-1 p-1">
+        <div className="mb-6 flex rounded-xl border border-border glass p-1">
           <button
             onClick={() => setMode("email")}
             className={`flex-1 rounded-lg py-2.5 font-mono text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
@@ -234,7 +234,7 @@ const Login = () => {
             }`}
           >
             <Fingerprint className="h-3.5 w-3.5" />
-            AnÃ´nimo
+            Anônimo
           </button>
         </div>
 
@@ -249,43 +249,43 @@ const Login = () => {
               <form onSubmit={handleEmailSubmit} className="space-y-4">
                 {isSignUp && (
                   <div className="space-y-2">
-                    <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Nome</label>
+                    <label className="font-mono text-xs uppercase tracking-wider text-white">Nome</label>
                     <Input
                       type="text"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Seu nome"
-                      className="border-border bg-surface-1 font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-primary/20"
+                      className="border-border bg-black/50 font-mono text-sm text-white placeholder:text-gray-300 focus:border-primary focus:ring-primary/20"
                     />
                   </div>
                 )}
                 <div className="space-y-2">
-                  <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Email</label>
+                  <label className="font-mono text-xs uppercase tracking-wider text-white">Email</label>
                   <Input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="seu@email.com"
                     required
-                    className="border-border bg-surface-1 font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-primary/20"
+                    className="border-border bg-black/50 font-mono text-sm text-white placeholder:text-gray-300 focus:border-primary focus:ring-primary/20"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Senha</label>
+                  <label className="font-mono text-xs uppercase tracking-wider text-white">Senha</label>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢"
+                      placeholder="••••••••••"
                       required
                       minLength={6}
-                      className="border-border bg-surface-1 pr-10 font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-primary/20"
+                      className="border-border bg-black/50 pr-10 font-mono text-sm text-white placeholder:text-gray-300 focus:border-primary focus:ring-primary/20"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-primary transition-colors"
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -294,16 +294,16 @@ const Login = () => {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-primary font-mono text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary/90 neon-glow transition-shadow"
+                  className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 font-mono text-sm font-semibold uppercase tracking-wider text-white hover:opacity-90 neon-glow transition-shadow"
                 >
                   {loading ? "Aguarde..." : isSignUp ? "Criar Conta" : "Acessar Sistema"}
                 </Button>
               </form>
               <button
                 onClick={() => setIsSignUp(!isSignUp)}
-                className="mt-4 w-full text-center font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+                className="mt-4 w-full text-center font-mono text-xs text-gray-300 hover:text-primary transition-colors"
               >
-                {isSignUp ? "JÃ¡ tem conta? Entrar" : "NÃ£o tem conta? Criar uma"}
+                {isSignUp ? "Já tem conta? Entrar" : "Não tem conta? Criar uma"}
               </button>
             </motion.div>
           ) : (
@@ -314,46 +314,46 @@ const Login = () => {
               exit={{ opacity: 0, x: -20 }}
             >
               <AnimatePresence mode="wait">
-                {/* INTRO â New account */}
+                {/* INTRO — New account */}
                 {anonStep === "intro" && (
                   <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
-                    <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+                    <div className="rounded-xl border border-primary/20 bg-black/50 p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
                           <UserX className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <p className="font-mono text-sm font-bold text-foreground">Anonymous Entry</p>
-                          <p className="font-mono text-[10px] text-muted-foreground">Anonimato total desde o primeiro segundo</p>
+                          <p className="font-mono text-sm font-bold text-white">Anonymous Entry</p>
+                          <p className="font-mono text-[10px] text-gray-300">Anonimato total desde o primeiro segundo</p>
                         </div>
                       </div>
                       <div className="space-y-2.5">
                         <div className="flex items-start gap-2">
                           <Fingerprint className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                          <p className="font-mono text-[11px] text-muted-foreground leading-tight">
-                            Conta vinculada Ã  <span className="text-foreground">Secure Enclave</span> do seu dispositivo. SÃ³ o dono fÃ­sico do aparelho pode acessar.
+                          <p className="font-mono text-[11px] text-gray-300 leading-tight">
+                            Conta vinculada à <span className="text-white">Secure Enclave</span> do seu dispositivo. Só o dono físico do aparelho pode acessar.
                           </p>
                         </div>
                         <div className="flex items-start gap-2">
                           <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                          <p className="font-mono text-[11px] text-muted-foreground leading-tight">
-                            <span className="text-foreground">Imune a SIM Swap.</span> Sem telefone, sem email â impossÃ­vel clonar seu acesso.
+                          <p className="font-mono text-[11px] text-gray-300 leading-tight">
+                            <span className="text-white">Imune a SIM Swap.</span> Sem telefone, sem email — impossível clonar seu acesso.
                           </p>
                         </div>
                         <div className="flex items-start gap-2">
                           <KeyRound className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                          <p className="font-mono text-[11px] text-muted-foreground leading-tight">
-                            Protegido por <span className="text-foreground">CÃ³digo Mestre de 6 dÃ­gitos</span> + biometria do hardware.
+                          <p className="font-mono text-[11px] text-gray-300 leading-tight">
+                            Protegido por <span className="text-white">Código Mestre de 6 dígitos</span> + biometria do hardware.
                           </p>
                         </div>
                       </div>
                     </div>
                     <Button
                       onClick={() => setAnonStep("create-code")}
-                      className="w-full bg-primary font-mono text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary/90 neon-glow"
+                      className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 font-mono text-sm font-semibold uppercase tracking-wider text-white hover:opacity-90 neon-glow"
                     >
                       <Fingerprint className="mr-2 h-4 w-4" />
-                      Criar Acesso AnÃ´nimo
+                      Criar Acesso Anônimo
                     </Button>
                   </motion.div>
                 )}
@@ -365,25 +365,25 @@ const Login = () => {
                       <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10">
                         <KeyRound className="h-7 w-7 text-primary" />
                       </div>
-                      <p className="font-mono text-sm font-bold text-foreground">CÃ³digo Mestre</p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">Crie um cÃ³digo de 6 dÃ­gitos para proteger sua conta</p>
+                      <p className="font-mono text-sm font-bold text-white">Código Mestre</p>
+                      <p className="mt-1 font-mono text-xs text-gray-300">Crie um código de 6 dígitos para proteger sua conta</p>
                     </div>
                     <div className="flex justify-center">
                       <InputOTP maxLength={6} value={masterCodeInput} onChange={setMasterCodeInput}>
                         <InputOTPGroup>
-                          <InputOTPSlot index={0} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={1} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={2} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={3} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={4} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={5} className="border-border bg-surface-1 text-foreground" />
+                          <InputOTPSlot index={0} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={1} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={2} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={3} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={4} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={5} className="border-border bg-black/50 text-white" />
                         </InputOTPGroup>
                       </InputOTP>
                     </div>
                     <Button
                       onClick={handleCreateCode}
                       disabled={masterCodeInput.length !== 6}
-                      className="w-full bg-primary font-mono text-sm text-primary-foreground hover:bg-primary/90"
+                      className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 font-mono text-sm text-white hover:opacity-90"
                     >
                       Continuar
                     </Button>
@@ -394,25 +394,25 @@ const Login = () => {
                 {anonStep === "confirm-code" && (
                   <motion.div key="confirm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="text-center">
-                      <p className="font-mono text-sm font-bold text-foreground">Confirmar CÃ³digo</p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">Digite novamente para confirmar</p>
+                      <p className="font-mono text-sm font-bold text-white">Confirmar Código</p>
+                      <p className="mt-1 font-mono text-xs text-gray-300">Digite novamente para confirmar</p>
                     </div>
                     <div className="flex justify-center">
                       <InputOTP maxLength={6} value={confirmCodeInput} onChange={setConfirmCodeInput}>
                         <InputOTPGroup>
-                          <InputOTPSlot index={0} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={1} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={2} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={3} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={4} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={5} className="border-border bg-surface-1 text-foreground" />
+                          <InputOTPSlot index={0} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={1} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={2} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={3} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={4} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={5} className="border-border bg-black/50 text-white" />
                         </InputOTPGroup>
                       </InputOTP>
                     </div>
                     <Button
                       onClick={handleConfirmCode}
                       disabled={confirmCodeInput.length !== 6}
-                      className="w-full bg-primary font-mono text-sm text-primary-foreground hover:bg-primary/90"
+                      className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 font-mono text-sm text-white hover:opacity-90"
                     >
                       Confirmar
                     </Button>
@@ -430,64 +430,64 @@ const Login = () => {
                       >
                         <Fingerprint className="h-10 w-10 text-primary" />
                       </motion.div>
-                      <p className="font-mono text-sm font-bold text-foreground">Vincular Biometria</p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground leading-relaxed">
-                        Vincule sua digital ou Face ID Ã  Secure Enclave do dispositivo para acesso instantÃ¢neo.
+                      <p className="font-mono text-sm font-bold text-white">Vincular Biometria</p>
+                      <p className="mt-1 font-mono text-xs text-gray-300 leading-relaxed">
+                        Vincule sua digital ou Face ID à Secure Enclave do dispositivo para acesso instantâneo.
                       </p>
                     </div>
                     <Button
                       onClick={() => handleFinishAnonRegistration(true)}
                       disabled={loading}
-                      className="w-full bg-primary font-mono text-sm text-primary-foreground hover:bg-primary/90 neon-glow"
+                      className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 font-mono text-sm text-white hover:opacity-90 neon-glow"
                     >
                       <Fingerprint className="mr-2 h-4 w-4" />
                       {loading ? "Registrando..." : "Registrar Biometria"}
                     </Button>
                     <button
                       onClick={() => handleFinishAnonRegistration(false)}
-                      className="w-full text-center font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
+                      className="w-full text-center font-mono text-xs text-gray-300 hover:text-primary transition-colors"
                     >
-                      Pular â usar apenas CÃ³digo Mestre
+                      Pular — usar apenas Código Mestre
                     </button>
                   </motion.div>
                 )}
 
-                {/* LOGIN â Enter master code */}
+                {/* LOGIN — Enter master code */}
                 {anonStep === "login-code" && (
                   <motion.div key="login-code" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="text-center">
                       <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10">
                         <Lock className="h-7 w-7 text-primary" />
                       </div>
-                      <p className="font-mono text-sm font-bold text-foreground">CÃ³digo Mestre</p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">Digite seu cÃ³digo de 6 dÃ­gitos</p>
+                      <p className="font-mono text-sm font-bold text-white">Código Mestre</p>
+                      <p className="mt-1 font-mono text-xs text-gray-300">Digite seu código de 6 dígitos</p>
                     </div>
                     <div className="flex justify-center">
                       <InputOTP maxLength={6} value={masterCodeInput} onChange={setMasterCodeInput}>
                         <InputOTPGroup>
-                          <InputOTPSlot index={0} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={1} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={2} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={3} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={4} className="border-border bg-surface-1 text-foreground" />
-                          <InputOTPSlot index={5} className="border-border bg-surface-1 text-foreground" />
+                          <InputOTPSlot index={0} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={1} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={2} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={3} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={4} className="border-border bg-black/50 text-white" />
+                          <InputOTPSlot index={5} className="border-border bg-black/50 text-white" />
                         </InputOTPGroup>
                       </InputOTP>
                     </div>
                     <Button
                       onClick={handleAnonLogin}
                       disabled={masterCodeInput.length !== 6 || loading}
-                      className="w-full bg-primary font-mono text-sm text-primary-foreground hover:bg-primary/90 neon-glow"
+                      className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 font-mono text-sm text-white hover:opacity-90 neon-glow"
                     >
                       {loading ? "Verificando..." : "Desbloquear"}
                     </Button>
-                    <p className="text-center font-mono text-[10px] text-muted-foreground/50">
+                    <p className="text-center font-mono text-[10px] text-gray-300">
                       Protegido pela Secure Enclave do dispositivo
                     </p>
                   </motion.div>
                 )}
 
-                {/* LOGIN â Biometric verification */}
+                {/* LOGIN — Biometric verification */}
                 {anonStep === "login-bio" && (
                   <motion.div key="login-bio" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="text-center">
@@ -498,13 +498,13 @@ const Login = () => {
                       >
                         <Fingerprint className="h-10 w-10 text-primary" />
                       </motion.div>
-                      <p className="font-mono text-sm font-bold text-foreground">VerificaÃ§Ã£o BiomÃ©trica</p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">Use sua digital ou Face ID para continuar</p>
+                      <p className="font-mono text-sm font-bold text-white">Verificação Biométrica</p>
+                      <p className="mt-1 font-mono text-xs text-gray-300">Use sua digital ou Face ID para continuar</p>
                     </div>
                     <Button
                       onClick={handleBiometricLogin}
                       disabled={loading}
-                      className="w-full bg-primary font-mono text-sm text-primary-foreground hover:bg-primary/90 neon-glow"
+                      className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 font-mono text-sm text-white hover:opacity-90 neon-glow"
                     >
                       <Fingerprint className="mr-2 h-4 w-4" />
                       {loading ? "Verificando..." : "Autenticar"}
@@ -516,8 +516,8 @@ const Login = () => {
           )}
         </AnimatePresence>
 
-        <p className="mt-8 text-center font-mono text-[10px] text-muted-foreground/50 text-shadow-xs-primary">
-          CRIPTOGRAFIA PONTA A PONTA ÃÂ· AES-256 ÃÂ· ZERO CUSTODY
+        <p className="mt-8 text-center font-mono text-[10px] text-gray-300 text-shadow-xs-primary">
+          CRIPTOGRAFIA PONTA A PONTA · AES-256 · ZERO CUSTODY
         </p>
       </motion.div>
     </div>
