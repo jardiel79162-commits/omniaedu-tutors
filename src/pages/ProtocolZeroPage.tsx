@@ -326,7 +326,7 @@ const ProtocolZeroPage = ({ ghostMode }: ProtocolZeroPageProps) => {
       <div className="mt-6 px-4">
         <div className="rounded-xl border border-border bg-surface-1 p-4">
           <p className="text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            "No JTC Parker, o que é apagado<br />deixa de existir no mundo."
+            "No <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient">JTC Parker</span>, o que é apagado<br />deixa de existir no mundo."
           </p>
         </div>
       </div>
