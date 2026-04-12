@@ -98,4 +98,13 @@
     backdrop-filter: blur(12px);
     background: hsl(0 0% 7% / 0.8);
   }
+  .name-glow {
+    text-shadow: 0 0 8px hsl(var(--primary) / 0.6), 0 0 15px hsl(var(--primary) / 0.3);
+  }
+  .text-shadow-xs-primary {
+    text-shadow: 0 0 3px hsl(var(--primary) / 0.3), 0 0 5px hsl(var(--primary) / 0.1);
+  }
+  .text-shadow-sm-primary {
+    text-shadow: 0 0 5px hsl(var(--primary) / 0.4), 0 0 8px hsl(var(--primary) / 0.2);
+  }
 }

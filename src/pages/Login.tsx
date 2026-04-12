@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Shield, Eye, EyeOff, Fingerprint, KeyRound, UserX, Lock,
+  Shield, Eye, EyeOff, Fingerprint, KeyRound, UserX, Lock, Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -200,45 +200,41 @@ const Login = () => {
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center">
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", delay: 0.2 }}
             className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 neon-glow"
           >
             <Shield className="h-10 w-10 text-primary" />
           </motion.div>
-          <h1 className="font-mono text-3xl font-bold tracking-tight text-foreground">
-            JTC <span className="text-primary neon-text">Parker</span>
+          <h1 className="font-mono text-3xl font-bold text-foreground px-4 text-center name-glow">
+            JTC <span className="text-primary ">Parker</span>
           </h1>
-          <p className="mt-1 font-mono text-xs text-muted-foreground tracking-widest uppercase">
+          <small className="mt-1 font-mono text-xs text-muted-foreground uppercase text-shadow-sm-primary">
             Comunicação Segura
-          </p>
+          </small>
         </div>
 
         {/* Mode Selector */}
         <div className="mb-6 flex rounded-xl border border-border bg-surface-1 p-1">
           <button
             onClick={() => setMode("email")}
-            className={`flex-1 rounded-lg py-2.5 font-mono text-xs font-medium transition-all ${
+            className={`flex-1 rounded-lg py-2.5 font-mono text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
               mode === "email"
                 ? "bg-primary/15 text-primary border border-primary/30"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
+            <Mail className="h-3.5 w-3.5" />
             Email
           </button>
           <button
             onClick={() => setMode("anonymous")}
-            className={`flex-1 rounded-lg py-2.5 font-mono text-xs font-medium transition-all ${
+            className={`flex-1 rounded-lg py-2.5 font-mono text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
               mode === "anonymous"
                 ? "bg-primary/15 text-primary border border-primary/30"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <span className="flex items-center justify-center gap-1.5">
-              <Fingerprint className="h-3.5 w-3.5" />
-              Anônimo
-            </span>
+            <Fingerprint className="h-3.5 w-3.5" />
+            Anônimo
           </button>
         </div>
 
@@ -520,8 +516,8 @@ const Login = () => {
           )}
         </AnimatePresence>
 
-        <p className="mt-8 text-center font-mono text-[10px] text-muted-foreground/50 tracking-wider">
-          CRIPTOGRAFIA PONTA A PONTA · AES-256 · ZERO CUSTODY
+        <p className="mt-8 text-center font-mono text-[10px] text-muted-foreground/50 text-shadow-xs-primary">
+          CRIPTOGRAFIA PONTA A PONTA Â· AES-256 Â· ZERO CUSTODY
         </p>
       </motion.div>
     </div>
