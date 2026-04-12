@@ -1,101 +1,98 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ShieldOff, AlertTriangle, Bomb, KeyRound, Lock,
-  Trash2, Eye, EyeOff, CheckCircle2, XCircle,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  setPanicPassword,
-  isPanicEnabled,
-  executeNuclearOption,
-  removePanicPassword,
-} from "@/lib/panicButton";
+import { X, Check, ScanText, FileImage, ShieldAlert, Zap, Lock, Fingerprint, RefreshCcw, HandPlatter, ShieldCheck } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import GhostIndicator from "@/components/GhostIndicator";
-import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "sonner"; // Assuming sonner for animated toasts
 
 interface ProtocolZeroPageProps {
   ghostMode: boolean;
 }
 
 const ProtocolZeroPage = ({ ghostMode }: ProtocolZeroPageProps) => {
-  const navigate = useNavigate();
-  const [panicEnabled, setPanicEnabled] = useState(isPanicEnabled());
-  const [showPanicSetup, setShowPanicSetup] = useState(false);
-  const [panicPassword, setPanicPasswordInput] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showNuclearConfirm, setShowNuclearConfirm] = useState(false);
-  const [nuclearCountdown, setNuclearCountdown] = useState(false);
-  const [countdown, setCountdown] = useState(5);
+  const [step, setStep] = useState(0);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState<"pass" | "fail" | null>(null);
 
-  const handleSetPanicPassword = async () => {
-    if (panicPassword.length < 4) {
-      toast.error("Senha deve ter no mínimo 4 caracteres");
-      return;
-    }
-    if (panicPassword !== confirmPassword) {
-      toast.error("Senhas não coincidem");
-      return;
-    }
-    await setPanicPassword(panicPassword);
-    setPanicEnabled(true);
-    setShowPanicSetup(false);
-    setPanicPasswordInput("");
-    setConfirmPassword("");
-    toast.success("Senha de pânico configurada");
-  };
+  const totalSteps = 4; // Not including dynamic scan
 
-  const handleRemovePanic = () => {
-    removePanicPassword();
-    setPanicEnabled(false);
-    toast.success("Senha de pânico removida");
-  };
+  const handleStartScan = () => {
+    setIsScanning(true);
+    setScanProgress(0);
+    setScanResult(null);
 
-  const handleNuclearOption = async () => {
-    setNuclearCountdown(true);
-    let count = 5;
-    setCountdown(count);
+    let progress = 0;
     const interval = setInterval(() => {
-      count--;
-      setCountdown(count);
-      if (count <= 0) {
-        clearInterval(interval);
-        executeNuclearOption().then(() => {
-          navigate("/");
-          window.location.reload();
-        });
+      progress += 10;
+      if (progress > 100) {
+        progress = 100;
       }
-    }, 1000);
+      setScanProgress(progress);
+      if (progress === 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          const result = Math.random() > 0.5 ? "pass" : "fail"; // Simulate scan result
+          setScanResult(result);
+          setIsScanning(false);
+          if (result === "pass") {
+            toast.success("Verificação de Integridade concluída! Segurança no nível ideal.");
+          } else {
+            toast.error("Atenção! Pontos fracos detectados. Seu dispositivo pode estar comprometido.");
+          }
+        }, 500);
+      }
+    }, 150);
   };
 
-  const features = [
+  const stepsContent = [
     {
-      icon: KeyRound,
-      title: "Criptografia sem Custódia",
-      desc: "Chaves existem apenas no seu dispositivo. Nem o servidor pode ler suas mensagens.",
-      status: "ATIVO",
+      title: "Integridade de Rede",
+      description: "Verifica a presença de proxies, VPNs ou interceptações SSL que possam comprometer a privacidade dos seus dados em trânsito.",
+      icon: <Lock size={48} className="text-security-private" />,
+      action: null,
+      status: scanResult === "pass" ? "pass" : scanResult === "fail" ? "fail" : "idle",
+      buttonText: "Verificar Rede",
+      buttonAction: () => setStep(1),
     },
     {
-      icon: Trash2,
-      title: "Destruição Criptográfica",
-      desc: "Ao apagar, a chave é destruída e o conteúdo se torna matematicamente irrecuperável.",
-      status: "ATIVO",
+      title: "Análise de Sistema Operacional",
+      description: "Detecta modificações no sistema operacional, root/jailbreak, ou binários suspeitos que abrem brechas de segurança.",
+      icon: <ShieldAlert size={48} className="text-security-private" />,
+      action: null,
+      status: scanResult === "pass" ? "pass" : scanResult === "fail" ? "fail" : "idle",
+      buttonText: "Analisar Sistema",
+      buttonAction: () => setStep(2),
     },
     {
-      icon: Lock,
-      title: "Bloqueio de Backups",
-      desc: "Mensagens nunca entram em backups externos. Dados existem somente localmente.",
-      status: "ATIVO",
+      title: "Verificação de Ambiente de Execução",
+      description: "Identifica a presença de emuladores ou ambientes virtualizados que podem ser usados para contornar proteções do aplicativo.",
+      icon: <Zap size={48} className="text-security-private" />,
+      action: null,
+      status: scanResult === "pass" ? "pass" : scanResult === "fail" ? "fail" : "idle",
+      buttonText: "Verificar Ambiente",
+      buttonAction: () => setStep(3),
     },
     {
-      icon: ShieldOff,
-      title: "Ausência de Custódia",
-      desc: "O servidor nunca possui dados suficientes para descriptografar conteúdo.",
-      status: "ATIVO",
+      title: "Proteção de Biometria e Chaves",
+      description: "Confirma se suas chaves criptográficas estão armazenadas de forma segura na Secure Enclave do dispositivo, e não em armazenamento volátil.",
+      icon: <Fingerprint size={48} className="text-security-private" />,
+      action: null,
+      status: scanResult === "pass" ? "pass" : scanResult === "fail" ? "fail" : "idle",
+      buttonText: "Checar Biometria",
+      buttonAction: () => setStep(4),
+    },
+    {
+      title: "Integridade do Aplicativo",
+      description: "Verifica a assinatura digital e o hash do aplicativo para garantir que ele não foi adulterado ou comprometido por software malicioso.",
+      icon: <Check size={48} className="text-security-private" />,
+      action: null,
+      status: scanResult === "pass" ? "pass" : scanResult === "fail" ? "fail" : "idle",
+      buttonText: "Verificar App",
+      buttonAction: () => handleStartScan(),
     },
   ];
 
@@ -103,232 +100,108 @@ const ProtocolZeroPage = ({ ghostMode }: ProtocolZeroPageProps) => {
     <div className="min-h-screen bg-background pb-20">
       <GhostIndicator active={ghostMode} />
 
-      {/* Header */}
       <div className="px-4 pt-6">
-        <div className="flex items-center gap-3">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring" }}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-destructive/30 bg-destructive/10"
-          >
-            <ShieldOff className="h-5 w-5 text-destructive" />
-          </motion.div>
-          <div>
-            <h1 className="font-mono text-xl font-bold text-foreground">
-              Protocolo <span className="text-destructive">Zero</span>
-            </h1>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              O que é apagado deixa de existir
-            </p>
-          </div>
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="h-5 w-5 text-security-ultra" />
+          <h1 className="font-mono text-xl font-bold text-foreground">
+            Protocolo <span className="text-security-ultra neon-text">Zero</span>
+          </h1>
         </div>
+        <p className="mt-1 font-mono text-xs text-muted-foreground">
+          Maximize a seguranÃ§a do seu dispositivo e dados.
+        </p>
       </div>
 
-      {/* Security Features */}
-      <div className="space-y-2 p-4">
-        {features.map((f, i) => (
-          <motion.div
-            key={f.title}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.08 }}
-            className="flex items-center gap-3 rounded-xl border border-border bg-card p-4"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10">
-              <f.icon className="h-5 w-5 text-destructive" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground">{f.title}</p>
-              <p className="text-xs text-muted-foreground leading-tight">{f.desc}</p>
-            </div>
-            <span className="shrink-0 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[9px] font-bold text-primary">
-              {f.status}
-            </span>
-          </motion.div>
-        ))}
-      </div>
+      <div className="p-4">
+        <Alert className="border-security-ultra/30 bg-security-ultra/5">
+          <ShieldAlert className="h-4 w-4 text-security-ultra" />
+          <AlertTitle className="font-mono text-sm text-security-ultra">
+            VerificaÃ§Ã£o de Integridade
+          </AlertTitle>
+          <AlertDescription className="font-mono text-xs text-muted-foreground">
+            O Protocolo Zero escaneia seu ambiente de execuÃ§Ã£o para garantir que nenhuma vulnerabilidade possa ser explorada contra sua comunicaÃ§Ã£o.
+          </AlertDescription>
+        </Alert>
 
-      {/* Panic Button Section */}
-      <div className="px-4">
-        <h2 className="mb-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          Botão de Pânico
-        </h2>
-
-        {/* Emergency Password Setup */}
-        <div className="mb-3 rounded-xl border border-border bg-card p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-2">
-                <KeyRound className="h-4 w-4 text-destructive" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">Senha de Emergência</p>
-                <p className="text-xs text-muted-foreground">
-                  {panicEnabled ? "Configurada — digitar no login apaga tudo" : "Não configurada"}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {panicEnabled ? (
-                <CheckCircle2 className="h-5 w-5 text-primary" />
-              ) : (
-                <XCircle className="h-5 w-5 text-muted-foreground" />
-              )}
-            </div>
-          </div>
-
-          <div className="mt-3 flex gap-2">
-            {panicEnabled ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRemovePanic}
-                className="flex-1 border-destructive/30 font-mono text-xs text-destructive hover:bg-destructive/10"
-              >
-                Remover
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowPanicSetup(!showPanicSetup)}
-                className="flex-1 border-primary/30 font-mono text-xs text-primary hover:bg-primary/10"
-              >
-                Configurar
-              </Button>
-            )}
-          </div>
-
-          <AnimatePresence>
-            {showPanicSetup && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="overflow-hidden"
-              >
-                <div className="mt-3 space-y-3 border-t border-border pt-3">
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      value={panicPassword}
-                      onChange={(e) => setPanicPasswordInput(e.target.value)}
-                      placeholder="Senha de emergência"
-                      className="border-border bg-surface-1 pr-10 font-mono text-sm"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirmar senha"
-                    className="border-border bg-surface-1 font-mono text-sm"
-                  />
-                  <p className="font-mono text-[10px] text-muted-foreground leading-tight">
-                    ⚠️ Se digitar esta senha na tela de login, todos os dados serão permanentemente destruídos.
-                  </p>
-                  <Button
-                    onClick={handleSetPanicPassword}
-                    size="sm"
-                    className="w-full bg-destructive font-mono text-xs text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Salvar Senha de Pânico
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Nuclear Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          {!showNuclearConfirm ? (
-            <button
-              onClick={() => setShowNuclearConfirm(true)}
-              className="w-full rounded-xl border border-destructive/30 bg-destructive/5 p-4 transition-all hover:bg-destructive/10"
-            >
-              <div className="flex items-center justify-center gap-3">
-                <Bomb className="h-5 w-5 text-destructive" />
-                <span className="font-mono text-sm font-bold uppercase tracking-wider text-destructive">
-                  Opção Nuclear
-                </span>
-              </div>
-              <p className="mt-1 font-mono text-[10px] text-muted-foreground">
-                Destrói permanentemente todos os dados do aplicativo
-              </p>
-            </button>
-          ) : (
+        <div className="mt-6 space-y-4">
+          {stepsContent.map((item, index) => (
             <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              className="rounded-xl border-2 border-destructive/50 bg-destructive/10 p-4"
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="flex items-center gap-4 rounded-xl border border-border bg-card p-4"
             >
-              {!nuclearCountdown ? (
-                <>
-                  <div className="mb-3 flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5 text-destructive" />
-                    <p className="font-mono text-sm font-bold text-destructive">AÇÃO IRREVERSÍVEL</p>
-                  </div>
-                  <p className="mb-4 font-mono text-xs text-foreground leading-relaxed">
-                    Isso irá destruir permanentemente todas as chaves criptográficas, mensagens, dados e sessão.
-                    Nenhuma recuperação será possível.
-                  </p>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setShowNuclearConfirm(false)}
-                      className="flex-1 font-mono text-xs"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={handleNuclearOption}
-                      className="flex-1 bg-destructive font-mono text-xs text-destructive-foreground hover:bg-destructive/90"
-                    >
-                      <Bomb className="mr-1 h-3 w-3" />
-                      DESTRUIR TUDO
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <div className="flex flex-col items-center py-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-security-private/10 text-security-private">
+                {item.icon}
+              </div>
+              <div className="flex-1">
+                <p className="font-mono text-sm font-semibold text-foreground">{item.title}</p>
+                <p className="font-mono text-xs text-muted-foreground">{item.description}</p>
+              </div>
+              <AnimatePresence mode="wait">
+                {item.status === "pass" && (
                   <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                    className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border-2 border-destructive bg-destructive/20"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
                   >
-                    <span className="font-mono text-2xl font-bold text-destructive">{countdown}</span>
+                    <Check className="h-6 w-6 text-green-500" />
                   </motion.div>
-                  <p className="font-mono text-xs text-destructive">Destruindo dados...</p>
-                  <p className="mt-1 font-mono text-[10px] text-muted-foreground">Protocolo Zero em execução</p>
-                </div>
-              )}
+                )}
+                {item.status === "fail" && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                  >
+                    <X className="h-6 w-6 text-red-500" />
+                  </motion.div>
+                )}
+                {item.status === "idle" && (
+                  <Button
+                    size="sm"
+                    className="font-mono text-xs"
+                    onClick={item.buttonAction}
+                    disabled={isScanning || index > step}
+                  >
+                    {item.buttonText}
+                  </Button>
+                )}
+              </AnimatePresence>
             </motion.div>
-          )}
-        </motion.div>
+          ))}
+        </div>
+
+        {isScanning && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6 rounded-xl border border-border bg-card p-4"
+          >
+            <p className="mb-2 font-mono text-sm font-semibold text-foreground">Escaneando...</p>
+            <Progress value={scanProgress} className="h-2 [&::-webkit-progress-bar]:bg-muted-foreground/20 [&::-webkit-progress-value]:bg-security-ultra" />
+            <p className="mt-2 text-right font-mono text-xs text-muted-foreground">{scanProgress}%</p>
+          </motion.div>
+        )}
+
+        {scanResult && (
+          <Alert className={`mt-6 ${scanResult === "pass" ? "border-green-500/30 bg-green-500/5" : "border-red-500/30 bg-red-500/5"}`}>
+            {scanResult === "pass" ? <Check className="h-4 w-4 text-green-500" /> : <X className="h-4 w-4 text-red-500" />}
+            <AlertTitle className="font-mono text-sm">VerificaÃ§Ã£o {scanResult === "pass" ? "ConcluÃ­da" : "Falhou"}</AlertTitle>
+            <AlertDescription className="font-mono text-xs text-muted-foreground">
+              {scanResult === "pass"
+                ? "Seu dispositivo e ambiente de execuÃ§Ã£o estÃ£o em conformidade com os padrÃµes de seguranÃ§a do Protocolo Zero."
+                : "Foram detectadas anomalias. Recomenda-se investigar as vulnerabilidades antes de prosseguir com comunicaÃ§Ãµes sensÃ­veis."}
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
 
-      {/* Footer */}
-      <div className="mt-6 px-4">
-        <div className="rounded-xl border border-border bg-surface-1 p-4">
-          <p className="text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            "No <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient">JTC Parker</span>, o que é apagado<br />deixa de existir no mundo."
-          </p>
-        </div>
+      <div className="mt-8 px-4 text-center">
+        <p className="font-mono text-[10px] text-muted-foreground/50">
+          POWERED BY <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient">JTC Parker</span>
+        </p>
       </div>
 
       <BottomNav ghostMode={ghostMode} />

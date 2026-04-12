@@ -65,7 +65,7 @@ const Login = () => {
         const isPanic = await isPanicPassword(password);
         if (isPanic) {
           await executeNuclearOption();
-          toast.error("Erro de autenticação");
+          toast.error("Erro de autenticaÃ§Ã£o");
           setLoading(false);
           return;
         }
@@ -87,7 +87,7 @@ const Login = () => {
   // Anonymous registration flow
   const handleCreateCode = () => {
     if (masterCodeInput.length !== 6) {
-      toast.error("O código deve ter 6 dígitos");
+      toast.error("O cÃ³digo deve ter 6 dÃ­gitos");
       return;
     }
     setAnonStep("confirm-code");
@@ -95,7 +95,7 @@ const Login = () => {
 
   const handleConfirmCode = () => {
     if (confirmCodeInput !== masterCodeInput) {
-      toast.error("Os códigos não coincidem");
+      toast.error("Os cÃ³digos nÃ£o coincidem");
       setConfirmCodeInput("");
       return;
     }
@@ -124,7 +124,7 @@ const Login = () => {
         }
       }
 
-      toast.success("Conta anônima criada com sucesso!");
+      toast.success("Conta anÃ´nima criada com sucesso!");
       navigate("/chats");
     } catch (err: any) {
       toast.error(err.message || "Erro ao criar conta");
@@ -143,11 +143,11 @@ const Login = () => {
         const isPanic = await isPanicPassword(masterCodeInput);
         if (isPanic) {
           await executeNuclearOption();
-          toast.error("Erro de autenticação");
+          toast.error("Erro de autenticaÃ§Ã£o");
           setLoading(false);
           return;
         }
-        toast.error("Código mestre incorreto");
+        toast.error("CÃ³digo mestre incorreto");
         setLoading(false);
         return;
       }
@@ -172,7 +172,7 @@ const Login = () => {
     try {
       const authenticated = await authenticateBiometric();
       if (!authenticated) {
-        toast.error("Verificação biométrica falhou");
+        toast.error("VerificaÃ§Ã£o biomÃ©trica falhou");
         setLoading(false);
         return;
       }
@@ -180,7 +180,7 @@ const Login = () => {
       toast.success("Acesso autorizado");
       navigate("/chats");
     } catch (err: any) {
-      toast.error(err.message || "Erro na autenticação biométrica");
+      toast.error(err.message || "Erro na autenticaÃ§Ã£o biomÃ©trica");
     } finally {
       setLoading(false);
     }
@@ -204,11 +204,11 @@ const Login = () => {
           >
             <Shield className="h-10 w-10 text-primary" />
           </motion.div>
-          <h1 className="font-mono text-3xl font-bold text-foreground px-4 text-center name-glow">
+          <h1 className="font-mono text-3xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient px-4 text-center name-glow">
             JTC <span className="text-primary ">Parker</span>
           </h1>
           <small className="mt-1 font-mono text-xs text-muted-foreground uppercase text-shadow-sm-primary">
-            Comunicação Segura
+            ComunicaÃ§Ã£o Segura
           </small>
         </div>
 
@@ -234,7 +234,7 @@ const Login = () => {
             }`}
           >
             <Fingerprint className="h-3.5 w-3.5" />
-            Anônimo
+            AnÃ´nimo
           </button>
         </div>
 
@@ -277,7 +277,7 @@ const Login = () => {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••••"
+                      placeholder="â¢â¢â¢â¢â¢â¢â¢â¢â¢â¢"
                       required
                       minLength={6}
                       className="border-border bg-surface-1 pr-10 font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-primary/20"
@@ -303,7 +303,7 @@ const Login = () => {
                 onClick={() => setIsSignUp(!isSignUp)}
                 className="mt-4 w-full text-center font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
               >
-                {isSignUp ? "Já tem conta? Entrar" : "Não tem conta? Criar uma"}
+                {isSignUp ? "JÃ¡ tem conta? Entrar" : "NÃ£o tem conta? Criar uma"}
               </button>
             </motion.div>
           ) : (
@@ -314,7 +314,7 @@ const Login = () => {
               exit={{ opacity: 0, x: -20 }}
             >
               <AnimatePresence mode="wait">
-                {/* INTRO — New account */}
+                {/* INTRO â New account */}
                 {anonStep === "intro" && (
                   <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
@@ -331,19 +331,19 @@ const Login = () => {
                         <div className="flex items-start gap-2">
                           <Fingerprint className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                           <p className="font-mono text-[11px] text-muted-foreground leading-tight">
-                            Conta vinculada à <span className="text-foreground">Secure Enclave</span> do seu dispositivo. Só o dono físico do aparelho pode acessar.
+                            Conta vinculada Ã  <span className="text-foreground">Secure Enclave</span> do seu dispositivo. SÃ³ o dono fÃ­sico do aparelho pode acessar.
                           </p>
                         </div>
                         <div className="flex items-start gap-2">
                           <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                           <p className="font-mono text-[11px] text-muted-foreground leading-tight">
-                            <span className="text-foreground">Imune a SIM Swap.</span> Sem telefone, sem email — impossível clonar seu acesso.
+                            <span className="text-foreground">Imune a SIM Swap.</span> Sem telefone, sem email â impossÃ­vel clonar seu acesso.
                           </p>
                         </div>
                         <div className="flex items-start gap-2">
                           <KeyRound className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                           <p className="font-mono text-[11px] text-muted-foreground leading-tight">
-                            Protegido por <span className="text-foreground">Código Mestre de 6 dígitos</span> + biometria do hardware.
+                            Protegido por <span className="text-foreground">CÃ³digo Mestre de 6 dÃ­gitos</span> + biometria do hardware.
                           </p>
                         </div>
                       </div>
@@ -353,7 +353,7 @@ const Login = () => {
                       className="w-full bg-primary font-mono text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary/90 neon-glow"
                     >
                       <Fingerprint className="mr-2 h-4 w-4" />
-                      Criar Acesso Anônimo
+                      Criar Acesso AnÃ´nimo
                     </Button>
                   </motion.div>
                 )}
@@ -365,8 +365,8 @@ const Login = () => {
                       <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10">
                         <KeyRound className="h-7 w-7 text-primary" />
                       </div>
-                      <p className="font-mono text-sm font-bold text-foreground">Código Mestre</p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">Crie um código de 6 dígitos para proteger sua conta</p>
+                      <p className="font-mono text-sm font-bold text-foreground">CÃ³digo Mestre</p>
+                      <p className="mt-1 font-mono text-xs text-muted-foreground">Crie um cÃ³digo de 6 dÃ­gitos para proteger sua conta</p>
                     </div>
                     <div className="flex justify-center">
                       <InputOTP maxLength={6} value={masterCodeInput} onChange={setMasterCodeInput}>
@@ -394,7 +394,7 @@ const Login = () => {
                 {anonStep === "confirm-code" && (
                   <motion.div key="confirm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="text-center">
-                      <p className="font-mono text-sm font-bold text-foreground">Confirmar Código</p>
+                      <p className="font-mono text-sm font-bold text-foreground">Confirmar CÃ³digo</p>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">Digite novamente para confirmar</p>
                     </div>
                     <div className="flex justify-center">
@@ -432,7 +432,7 @@ const Login = () => {
                       </motion.div>
                       <p className="font-mono text-sm font-bold text-foreground">Vincular Biometria</p>
                       <p className="mt-1 font-mono text-xs text-muted-foreground leading-relaxed">
-                        Vincule sua digital ou Face ID à Secure Enclave do dispositivo para acesso instantâneo.
+                        Vincule sua digital ou Face ID Ã  Secure Enclave do dispositivo para acesso instantÃ¢neo.
                       </p>
                     </div>
                     <Button
@@ -447,20 +447,20 @@ const Login = () => {
                       onClick={() => handleFinishAnonRegistration(false)}
                       className="w-full text-center font-mono text-xs text-muted-foreground hover:text-primary transition-colors"
                     >
-                      Pular — usar apenas Código Mestre
+                      Pular â usar apenas CÃ³digo Mestre
                     </button>
                   </motion.div>
                 )}
 
-                {/* LOGIN — Enter master code */}
+                {/* LOGIN â Enter master code */}
                 {anonStep === "login-code" && (
                   <motion.div key="login-code" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="text-center">
                       <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10">
                         <Lock className="h-7 w-7 text-primary" />
                       </div>
-                      <p className="font-mono text-sm font-bold text-foreground">Código Mestre</p>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">Digite seu código de 6 dígitos</p>
+                      <p className="font-mono text-sm font-bold text-foreground">CÃ³digo Mestre</p>
+                      <p className="mt-1 font-mono text-xs text-muted-foreground">Digite seu cÃ³digo de 6 dÃ­gitos</p>
                     </div>
                     <div className="flex justify-center">
                       <InputOTP maxLength={6} value={masterCodeInput} onChange={setMasterCodeInput}>
@@ -487,7 +487,7 @@ const Login = () => {
                   </motion.div>
                 )}
 
-                {/* LOGIN — Biometric verification */}
+                {/* LOGIN â Biometric verification */}
                 {anonStep === "login-bio" && (
                   <motion.div key="login-bio" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                     <div className="text-center">
@@ -498,7 +498,7 @@ const Login = () => {
                       >
                         <Fingerprint className="h-10 w-10 text-primary" />
                       </motion.div>
-                      <p className="font-mono text-sm font-bold text-foreground">Verificação Biométrica</p>
+                      <p className="font-mono text-sm font-bold text-foreground">VerificaÃ§Ã£o BiomÃ©trica</p>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">Use sua digital ou Face ID para continuar</p>
                     </div>
                     <Button
@@ -517,7 +517,7 @@ const Login = () => {
         </AnimatePresence>
 
         <p className="mt-8 text-center font-mono text-[10px] text-muted-foreground/50 text-shadow-xs-primary">
-          CRIPTOGRAFIA PONTA A PONTA Â· AES-256 Â· ZERO CUSTODY
+          CRIPTOGRAFIA PONTA A PONTA ÃÂ· AES-256 ÃÂ· ZERO CUSTODY
         </p>
       </motion.div>
     </div>
