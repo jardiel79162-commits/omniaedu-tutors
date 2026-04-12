@@ -31,29 +31,29 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
-      <div className="mb-8 text-center">
+    <div className="flex min-h-screen flex-col items-center justify-center christmas-bg px-4 py-12">
+      <div className="mb-8 text-center relative z-10">
         <div className="mb-4 flex items-center justify-center gap-2">
-          <Calculator className="h-7 w-7 text-math" />
-          <PenTool className="h-7 w-7 text-calligraphy" />
-          <BookOpen className="h-7 w-7 text-reading" />
+          <Calculator className="h-7 w-7 text-christmas-gold" />
+          <PenTool className="h-7 w-7 text-christmas-gold" />
+          <BookOpen className="h-7 w-7 text-christmas-gold" />
         </div>
-        <h1 className="font-display text-3xl font-bold text-foreground">JTC OmniaEdu</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Seus professores de IA te esperam 🎓</p>
+        <h1 className="font-display text-4xl font-bold text-christmas-red drop-shadow-md">JTC OmniaEdu</h1>
+        <p className="mt-2 text-lg text-christmas-white">Seus professores de IA te esperam <span className="text-christmas-gold">🎁</span></p>
       </div>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-2xl border bg-card p-6 shadow-sm">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-2xl border border-christmas-green bg-christmas-card p-8 shadow-lg relative z-10">
         {!isLogin && (
-          <Input placeholder="Seu nome" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
+          <Input placeholder="Seu nome" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required className="bg-christmas-input text-christmas-dark border-christmas-green placeholder:text-christmas-darker" />
         )}
-        <Input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <Input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Aguarde…" : isLogin ? "Entrar" : "Criar conta"}
+        <Input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required className="bg-christmas-input text-christmas-dark border-christmas-green placeholder:text-christmas-darker" />
+        <Input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="bg-christmas-input text-christmas-dark border-christmas-green placeholder:text-christmas-darker" />
+        <Button type="submit" className="w-full bg-christmas-red hover:bg-christmas-red-dark text-white font-semibold shadow-md transition-all duration-300 transform hover:scale-105" disabled={loading}>
+          {loading ? "Noel está a caminho..." : isLogin ? "Entrar" : "Criar conta"}
         </Button>
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-center text-sm text-christmas-darker">
           {isLogin ? "Não tem conta? " : "Já tem conta? "}
-          <button type="button" className="font-semibold text-primary underline" onClick={() => setIsLogin(!isLogin)}>
+          <button type="button" className="font-semibold text-christmas-green hover:underline hover:text-christmas-red transition-colors duration-200" onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Criar conta" : "Entrar"}
           </button>
         </p>

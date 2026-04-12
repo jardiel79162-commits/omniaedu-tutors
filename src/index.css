@@ -45,6 +45,18 @@
     --sidebar-accent-foreground: 30 10% 20%;
     --sidebar-border: 30 15% 88%;
     --sidebar-ring: 30 60% 52%;
+
+    /* Christmas Theme Colors */
+    --christmas-red: 0 84.2% 59.4%; /* hsl(356, 84.2%, 59.4%) - Bright Red */
+    --christmas-red-dark: 0 84.2% 49.4%;
+    --christmas-green: 140 60% 35%; /* hsl(140, 60%, 35%) - Dark Green */
+    --christmas-green-light: 140 60% 80%;
+    --christmas-gold: 40 90% 60%; /* hsl(40, 90%, 60%) - Golden Yellow */
+    --christmas-white: 0 0% 98%; /* hsl(0, 0%, 98%) - Off-white */
+    --christmas-dark: 200 10% 20%; /* hsl(200, 10%, 20%) - Dark gray/almost black */
+    --christmas-darker: 200 10% 30%;
+    --christmas-card: 0 0% 100%; /* White card background */
+    --christmas-input: 0 0% 90%; /* Light gray input background */
   }
 }
 
@@ -55,4 +67,16 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+}
+
+.christmas-bg {
+  background: linear-gradient(135deg, hsl(var(--christmas-red-dark)), hsl(var(--christmas-green))) no-repeat center center fixed;
+  background-size: cover;
+  animation: christmasAnimate 20s ease infinite;
+}
+
+@keyframes christmasAnimate {
+  0% { background-position: 0% 50%;}
+  50% { background-position: 100% 50%;}
+  100% { background-position: 0% 50%;}
 }
