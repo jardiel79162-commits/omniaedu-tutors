@@ -39,7 +39,7 @@ const AuthPage = () => {
           <BookOpen className="h-7 w-7 text-christmas-gold" />
         </div>
         <h1 className="font-display text-4xl font-bold text-christmas-red drop-shadow-md">JTC OmniaEdu</h1>
-        <p className="mt-2 text-lg text-christmas-white">Seus professores de IA te esperam <span className="text-christmas-gold">🎁</span></p>
+        <p className="mt-2 text-lg text-christmas-white">Seus professores de inteligência artificial te esperam ✅</p>
       </div>
 
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-2xl border border-christmas-green bg-christmas-card p-8 shadow-lg relative z-10">
