@@ -1,9 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { BookOpen, Calculator, PenTool } from "lucide-react";
+
+// Hook personalizado para animação de criptografia
+const useCrypticTextAnimation = (text: string, interval: number = 70) => {
+  const [animatedText, setAnimatedText] = useState("");
+  const [isAnimating, setIsAnimating] = useState(true);
+  const chars = "!@#$%^&*()_+-=[]{}|;':\",./<>?`~";
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let index = 0;
+    let currentText = new Array(text.length).fill(null);
+
+    const animate = () => {
+      if (!isAnimating) {
+        setAnimatedText(text);
+        return;
+      }
+
+      for (let i = 0; i < text.length; i++) {
+        if (currentText[i] === null) { // Somente criptografa caracteres ainda não revelados
+          currentText[i] = chars[Math.floor(Math.random() * chars.length)];
+        }
+      }
+
+      if (index < text.length) {
+        currentText[index] = text[index];
+        index++;
+      } else {
+        setIsAnimating(false);
+      }
+
+      setAnimatedText(currentText.join(""));
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    const timerId = setTimeout(() => {
+      animationFrameId = requestAnimationFrame(animate);
+    }, 500); // Pequeno atraso antes de iniciar a animação
+
+    return () => {
+      clearTimeout(timerId);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [text, isAnimating]);
+
+  return animatedText;
+};
+
 
 const AuthPage = () => {
   const { signIn, signUp } = useAuth();
@@ -12,6 +60,9 @@ const AuthPage = () => {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const tagline = "Seus professores de inteligência artificial te esperam ✅";
+  const animatedTagline = useCrypticTextAnimation(tagline);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +90,7 @@ const AuthPage = () => {
           <BookOpen className="h-7 w-7 text-christmas-gold" />
         </div>
         <h1 className="font-display text-4xl font-bold text-christmas-red drop-shadow-md">JTC OmniaEdu</h1>
-        <p className="mt-2 text-lg text-christmas-white">Seus professores de inteligência artificial te esperam ✅</p>
+        <p className="mt-2 text-lg text-christmas-white">{animatedTagline}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-2xl border border-christmas-green bg-christmas-card p-8 shadow-lg relative z-10">
