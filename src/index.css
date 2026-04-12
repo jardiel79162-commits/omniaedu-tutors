@@ -15,7 +15,7 @@
     --popover: 0 0% 7%;
     --popover-foreground: 0 0% 90%;
 
-    --primary: 130 100% 50%;
+    --primary: 0 100% 50%;
     --primary-foreground: 0 0% 2%;
 
     --secondary: 0 0% 12%;
@@ -24,7 +24,7 @@
     --muted: 0 0% 14%;
     --muted-foreground: 0 0% 50%;
 
-    --accent: 130 100% 50%;
+    --accent: 0 100% 50%;
     --accent-foreground: 0 0% 2%;
 
     --destructive: 0 72% 51%;
@@ -32,33 +32,33 @@
 
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 130 100% 50%;
+    --ring: 0 100% 50%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --neon: 130 100% 50%;
-    --neon-glow: 0 0 20px hsl(130 100% 50% / 0.4), 0 0 40px hsl(130 100% 50% / 0.15);
-    --neon-glow-strong: 0 0 10px hsl(130 100% 50% / 0.6), 0 0 30px hsl(130 100% 50% / 0.3), 0 0 60px hsl(130 100% 50% / 0.1);
+    --neon: 0 100% 50%;
+    --neon-glow: 0 0 20px hsl(0 100% 50% / 0.4), 0 0 40px hsl(0 100% 50% / 0.15);
+    --neon-glow-strong: 0 0 10px hsl(0 100% 50% / 0.6), 0 0 30px hsl(0 100% 50% / 0.3), 0 0 60px hsl(0 100% 50% / 0.1);
     --surface-1: 0 0% 7%;
     --surface-2: 0 0% 10%;
     --surface-3: 0 0% 14%;
     --priority-high: 0 72% 51%;
     --priority-medium: 45 100% 50%;
     --priority-low: 0 0% 40%;
-    --security-normal: 130 100% 50%;
+    --security-normal: 0 100% 50%;
     --security-private: 45 100% 50%;
     --security-ultra: 0 72% 51%;
-    --ghost: 180 100% 50%;
+    --ghost: 0 100% 50%;
 
-    --sidebar-background: 0 0% 5%;
+    --sidebar-background: 0 0% 7%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 130 100% 50%;
+    --sidebar-primary: 0 70% 50%;
     --sidebar-primary-foreground: 0 0% 2%;
-    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent: 0 0% 15%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 0 0% 15%;
-    --sidebar-ring: 130 100% 50%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 0 70% 50%;
   }
 }
 
@@ -80,10 +80,10 @@
     box-shadow: var(--neon-glow-strong);
   }
   .neon-text {
-    text-shadow: 0 0 10px hsl(130 100% 50% / 0.6), 0 0 20px hsl(130 100% 50% / 0.3);
+    text-shadow: 0 0 10px hsl(0 100% 50% / 0.6), 0 0 20px hsl(0 100% 50% / 0.3);
   }
   .ghost-glow {
-    box-shadow: 0 0 20px hsl(180 100% 50% / 0.3), 0 0 40px hsl(180 100% 50% / 0.1);
+    box-shadow: 0 0 20px hsl(0 100% 50% / 0.3), 0 0 40px hsl(0 100% 50% / 0.1);
   }
   .scanline {
     background: repeating-linear-gradient(
