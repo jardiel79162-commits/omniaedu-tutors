@@ -20,11 +20,11 @@ const Register = () => {
   const register = async () => {
     try {
       if (password !== confirmPassword) {
-        alert("As senhas não coincidem!");
+        alert("As senhas nÃ£o coincidem!");
         return;
       }
       if (!recaptchaValue) {
-        alert("Por favor, complete a verificação reCAPTCHA.");
+        alert("Por favor, complete a verificaÃ§Ã£o reCAPTCHA.");
         return;
       }
       const userCredential = await createUserWithEmailAndPassword(
@@ -46,16 +46,16 @@ const Register = () => {
       {/* Lado Esquerdo (Imagem) */}
       <div className="hidden lg:flex items-center justify-center flex-1 text-black">
         <img
-          src="https://images.unsplash.com/photo-1699742840632-ab1630c71a39?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Imagem de Fundo"
+          src="https://images.unsplash.com/photo-1546733241-11d67069b25f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Imagem de Fundo Natalina"
           className="w-full h-full object-cover"
         />
       </div>
 
-      {/* Lado Direito (Formulário de Registro) */}
+      {/* Lado Direito (FormulÃ¡rio de Registro) */}
       <div className="flex items-center justify-center flex-1 relative z-10">
-        <div className="w-full max-w-md p-8 space-y-6 bg-gray-800/80 rounded-lg shadow-md">
-          <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient font-sans">
+        <div className="w-full max-w-md p-8 space-y-6 bg-red-900/80 rounded-lg shadow-xl border border-green-700">
+          <h1 className="text-4xl font-extrabold text-center text-green-400 drop-shadow-lg">
             JTC Parker
           </h1>
           <p className="text-center text-white">
@@ -65,23 +65,23 @@ const Register = () => {
           <div>
             <label
               htmlFor="displayName"
-              className="block text-sm font-medium text-gray-200"
+              className="block text-sm font-medium text-white"
             >
-              Nome de Usuário
+              Nome de UsuÃ¡rio
             </label>
             <input
               type="text"
               id="displayName"
-              placeholder="Digite seu nome de usuário"
+              placeholder="Digite seu nome de usuÃ¡rio"
               onChange={(e) => setDisplayName(e.target.value)}
-              className="w-full px-4 py-2 mt-2 text-white bg-gray-700/70 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 mt-2 text-white bg-red-800/70 border border-green-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-200"
+              className="block text-sm font-medium text-white"
             >
               Email
             </label>
@@ -90,14 +90,14 @@ const Register = () => {
               id="email"
               placeholder="Digite seu email"
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 mt-2 text-white bg-gray-700/70 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 mt-2 text-white bg-red-800/70 border border-green-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-200"
+              className="block text-sm font-medium text-white"
             >
               Senha
             </label>
@@ -106,14 +106,14 @@ const Register = () => {
               id="password"
               placeholder="Digite sua senha"
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 mt-2 text-white bg-gray-700/70 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 mt-2 text-white bg-red-800/70 border border-green-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
           <div>
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-200"
+              className="block text-sm font-medium text-white"
             >
               Confirmar Senha
             </label>
@@ -122,7 +122,7 @@ const Register = () => {
               id="confirmPassword"
               placeholder="Confirme sua senha"
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 mt-2 text-white bg-gray-700/70 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 mt-2 text-white bg-red-800/70 border border-green-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
@@ -135,21 +135,21 @@ const Register = () => {
 
           <button
             onClick={register}
-            className="w-full px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-teal-500 rounded-md hover:from-blue-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full px-4 py-2 text-white bg-green-700 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
           >
             Registrar
           </button>
 
-          <p className="text-center text-gray-200">
-            Já tem uma conta?{" "}
-            <Link to="/login" className="text-blue-300 hover:underline">
+          <p className="text-center text-white">
+            JÃ¡ tem uma conta?{" "}
+            <Link to="/login" className="text-green-300 hover:underline">
               Entrar
             </Link>
           </p>
 
-          <p className="text-center text-gray-300 text-xs mt-6">
+          <p className="text-center text-white text-xs mt-6">
             &copy; 2024{" "}
-            <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient font-sans">
+            <span className="text-green-400 font-extrabold">
               JTC Parker
             </span>
             . Todos os direitos reservados.

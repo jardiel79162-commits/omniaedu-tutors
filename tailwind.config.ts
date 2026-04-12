@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+        christmas: ["Mountains of Christmas", "cursive"], // Exemplo de fonte de Natal, precisa ser importada
       },
       colors: {
         border: "hsl(var(--border))",
@@ -72,11 +73,12 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        // Cores de Natal
+        'christmas-red': '#DC143C', // Carmim
+        'christmas-green': '#228B22', // Verde Floresta
+        'gold': '#FFD700', // Dourado
+        'silver': '#C0C0C0', // Prata
+        'snow-white': '#FFFAFA', // Branco Neve
       },
       keyframes: {
         "accordion-down": {
@@ -95,12 +97,18 @@ export default {
           "0%": { transform: "translateY(-100%)" },
           "100%": { transform: "translateY(100%)" },
         },
+        "snow-fall": { // Animação de Neve
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "50%": { opacity: "1" },
+          "100%": { transform: "translateY(100%)", opacity: "0" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-neon": "pulse_neon 2s ease-in-out infinite",
         scan: "scan 3s linear infinite",
+        "snow-fall": "snow-fall 10s linear infinite", // Animação de Neve
       },
     },
   },
