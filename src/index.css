@@ -1,27 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* AnimaÃ§Ã£o para o gradiente de arco-Ã­ris */
-@keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+@layer base {
+  :root {
+    --background: 40 30% 97%;
+    --foreground: 30 10% 15%;
+    --card: 40 25% 95%;
+    --card-foreground: 30 10% 15%;
+    --popover: 40 25% 95%;
+    --popover-foreground: 30 10% 15%;
+    --primary: 30 60% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 20% 90%;
+    --secondary-foreground: 30 10% 25%;
+    --muted: 40 15% 92%;
+    --muted-foreground: 30 8% 50%;
+    --accent: 40 20% 88%;
+    --accent-foreground: 30 10% 20%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 30 60% 52%;
+    --radius: 1rem;
+
+    /* OmniaEdu Teacher Colors */
+    --math: 220 70% 55%;
+    --math-light: 220 70% 94%;
+    --calligraphy: 320 60% 55%;
+    --calligraphy-light: 320 60% 94%;
+    --reading: 145 55% 45%;
+    --reading-light: 145 55% 92%;
+    --mentor: 30 75% 55%;
+    --mentor-light: 30 75% 93%;
+
+    --sidebar-background: 40 25% 95%;
+    --sidebar-foreground: 30 10% 15%;
+    --sidebar-primary: 30 60% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 20% 88%;
+    --sidebar-accent-foreground: 30 10% 20%;
+    --sidebar-border: 30 15% 88%;
+    --sidebar-ring: 30 60% 52%;
+  }
 }
 
-@keyframes christmas-background {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-body {
-  background: linear-gradient(270deg, #8B0000, #DC143C, #FFD700, #006400, #228B22, #FFC0CB); /* Vermelho escuro, Carmim, Dourado, Verde escuro, Verde floresta, Rosa claro */
-  background-size: 800% 800%;
-  animation: christmas-background 15s ease infinite;
-}
-
-.animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 5s ease infinite;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
 }
