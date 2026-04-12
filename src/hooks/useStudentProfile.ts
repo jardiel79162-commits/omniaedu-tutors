@@ -20,22 +20,17 @@ export function useStudentProfile() {
 
   useEffect(() => {
     if (!user) { setProfile(null); setLoading(false); return; }
-
-    const fetch = async () => {
-      const { data } = await supabase
-        .from("student_profiles")
-        .select("*")
-        .eq("user_id", user.id)
-        .maybeSingle();
+    const load = async () => {
+      const { data } = await (supabase as any).from("student_profiles").select("*").eq("user_id", user.id).maybeSingle();
       setProfile(data as StudentProfile | null);
       setLoading(false);
     };
-    fetch();
+    load();
   }, [user]);
 
   return { profile, loading, refetch: async () => {
     if (!user) return;
-    const { data } = await supabase.from("student_profiles").select("*").eq("user_id", user.id).maybeSingle();
+    const { data } = await (supabase as any).from("student_profiles").select("*").eq("user_id", user.id).maybeSingle();
     setProfile(data as StudentProfile | null);
   }};
 }

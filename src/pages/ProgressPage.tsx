@@ -13,6 +13,7 @@ interface Feedback {
 }
 
 const subjectLabel: Record<string, string> = { math: "Matemática", reading: "Leitura", calligraphy: "Caligrafia", mentor: "Mentor" };
+const db = supabase as any;
 
 const ProgressPage = () => {
   const { user } = useAuth();
@@ -21,16 +22,8 @@ const ProgressPage = () => {
 
   useEffect(() => {
     if (!user) return;
-    supabase
-      .from("teacher_feedback" as any)
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(30)
-      .then(({ data }) => {
-        setFeedbacks((data as Feedback[]) || []);
-        setLoading(false);
-      });
+    db.from("teacher_feedback").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30)
+      .then(({ data }: any) => { setFeedbacks((data as Feedback[]) || []); setLoading(false); });
   }, [user]);
 
   if (loading) return <div className="flex min-h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /><BottomNav /></div>;
