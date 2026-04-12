@@ -46,17 +46,18 @@
     --sidebar-border: 30 15% 88%;
     --sidebar-ring: 30 60% 52%;
 
-    /* Christmas Theme Colors */
-    --christmas-red: 0 84.2% 59.4%; /* hsl(356, 84.2%, 59.4%) - Bright Red */
-    --christmas-red-dark: 0 84.2% 49.4%;
-    --christmas-green: 140 60% 35%; /* hsl(140, 60%, 35%) - Dark Green */
-    --christmas-green-light: 140 60% 80%;
-    --christmas-gold: 40 90% 60%; /* hsl(40, 90%, 60%) - Golden Yellow */
-    --christmas-white: 0 0% 98%; /* hsl(0, 0%, 98%) - Off-white */
-    --christmas-dark: 200 10% 20%; /* hsl(200, 10%, 20%) - Dark gray/almost black */
-    --christmas-darker: 200 10% 30%;
-    --christmas-card: 0 0% 100%; /* White card background */
-    --christmas-input: 0 0% 90%; /* Light gray input background */
+    /* Christmas Theme Colors - Modernized */
+    --christmas-red: 350 70% 45%; /* hsl(350, 70%, 45%) - Deep Crimson Red */
+    --christmas-red-dark: 350 70% 35%;
+    --christmas-green: 140 50% 30%; /* hsl(140, 50%, 30%) - Forest Green */
+    --christmas-green-light: 140 50% 70%;
+    --christmas-gold: 40 80% 55%; /* hsl(40, 80%, 55%) - Muted Gold */
+    --christmas-silver: 200 10% 75%; /* hsl(200, 10%, 75%) - Silver/Gray */
+    --christmas-white: 0 0% 95%; /* hsl(0, 0%, 95%) - Soft White */
+    --christmas-dark: 200 10% 15%; /* hsl(200, 10%, 15%) - Dark charcoal */
+    --christmas-darker: 200 10% 25%;
+    --christmas-card: 0 0% 99%; /* Slightly off-white card for modernity */
+    --christmas-input: 0 0% 93%; /* Light gray input for modernity */
   }
 }
 
@@ -66,6 +67,13 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    /* Apply christmas theme by default for the entire system */
+    background: radial-gradient(circle at top left, hsl(var(--christmas-green-light)) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, hsl(var(--christmas-red-dark)) 0%, transparent 40%),
+                linear-gradient(135deg, hsl(var(--christmas-red)) 0%, hsl(var(--christmas-green)) 100%);
+    background-size: 400% 400%; /* Larger for subtle animation */
+    animation: christmasAnimateBackground 30s ease infinite alternate;
+    overflow-x: hidden; /* Prevent horizontal scroll from math elements */
   }
 }
 
@@ -91,6 +99,68 @@
   75% { background-position: 50% 25%; opacity: 1; }
   100% { background-position: 0% 50%; opacity: 0.9; }
 }
+
+@keyframes christmasAnimateBackground {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* Snowfall Animation */
+.snow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.snowflake {
+  position: absolute;
+  background-color: hsl(var(--christmas-white));
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: snowfall linear infinite;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Subtle Pulsing Lights */
+@keyframes pulse-light {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+.christmas-light {
+  animation: pulse-light 3s ease-in-out infinite;
+}
+
+/* Math elements base styling - floating gently */
+@keyframes float-math {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+  33% { transform: translateY(-10px) rotate(5deg); opacity: 0.15; }
+  66% { transform: translateY(10px) rotate(-5deg); opacity: 0.1; }
+}
+
+.math-element {
+  position: absolute;
+  font-family: 'Times New Roman', serif; /* Classic math font */
+  font-size: 1.5rem;
+  color: hsl(var(--christmas-gold));
+  opacity: 0.1;
+  pointer-events: none;
+  animation: float-math 15s ease-in-out infinite;
+  z-index: -1; /* Behind content */
+}
+
 
 /* Rainbow gradient for JTC Parker (if still used on other pages) */
 @keyframes gradient {
