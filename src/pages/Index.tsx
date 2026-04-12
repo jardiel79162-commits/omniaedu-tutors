@@ -15,7 +15,7 @@ const Index = () => {
             animation: gradient 3s ease infinite;
           }
         `}</style>
-        <h1 className="mb-4 text-4xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient">
+        <h1 className="mb-4 text-4xl font-sans font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-transparent bg-clip-text animate-gradient">
           Bem-vindo ao JTC Parker
         </h1>
         <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
