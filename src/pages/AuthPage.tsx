@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { BookOpen, Calculator, PenTool } from "lucide-react";
 
-// Hook personalizado para animaÃ§Ã£o de criptografia contÃ­nua
+// Hook personalizado para animaÃÂ§ÃÂ£o de criptografia contÃÂ­nua
 const useContinuousCrypticTextAnimation = (text: string, charInterval: number = 70, displayDuration: number = 2000) => {
   const [animatedText, setAnimatedText] = useState("");
   const [isEncrypting, setIsEncrypting] = useState(false);
@@ -41,31 +41,50 @@ const useContinuousCrypticTextAnimation = (text: string, charInterval: number = 
           charIndex++;
           animationFrameId = requestAnimationFrame(() => setTimeout(encryptStep, charInterval));
         } else {
-          // Revelado, agora espere e inicie a criptografia novamente
-          setIsEncrypting(false);
-          animationTimeoutRef.current = setTimeout(() => {
-            setIsEncrypting(true);
-            charIndex = 0; // Reset para a prÃ³xima criptografia
-            requestAnimationFrame(() => setTimeout(encryptStep, charInterval));
-          }, displayDuration) as unknown as number;
+          // Revertendo a criptografia
+          revealTimer = setTimeout(() => {
+            const decryptStep = () => {
+              tempText = "";
+              for (let i = 0; i < textRef.current.length; i++) {
+                if (i < charIndex) {
+                  tempText += textRef.current[i];
+                } else {
+                  tempText += chars[Math.floor(Math.random() * chars.length)];
+                }
+              }
+              setAnimatedText(tempText);
+
+              if (charIndex > 0) {
+                charIndex--;
+                animationFrameId = requestAnimationFrame(() => setTimeout(decryptStep, charInterval));
+              } else {
+                // Totalmente descriptografado, exiba por displayDuration
+                setAnimatedText(textRef.current);
+                animationTimeoutRef.current = setTimeout(() => {
+                  setIsEncrypting(true); // Preparar para a próxima criptografia
+                  charIndex = 0;
+                  requestAnimationFrame(() => setTimeout(encryptStep, charInterval));
+                }, displayDuration) as unknown as number;
+              }
+            };
+            decryptStep();
+          }, displayDuration) as unknown as number; // Tempo para exibir o texto criptografado
         }
       };
 
-      // Iniciar a primeira passada de criptografia (se jÃ¡ nÃ£o estiver criptografando)
-      if (isEncrypting) {
-        encryptStep();
-      } else {
-        setAnimatedText(textRef.current);
-        charIndex = 0; // Prepara para a prÃ³xima criptografia
+    if (isEncrypting) {
+        setAnimatedText(textRef.current); // Garante que o texto original apareça primeiro
+        charIndex = textRef.current.length; // Começa revelado para então criptografar
         animationTimeoutRef.current = setTimeout(() => {
-          setIsEncrypting(true);
-          requestAnimationFrame(() => setTimeout(encryptStep, charInterval));
+          setIsEncrypting(false); // Inicia a criptografia
+          encryptStep();
         }, displayDuration) as unknown as number;
+      } else {
+        encryptStep(); // Inicia a criptografia
       }
     };
 
-    // Inicia o ciclo
-    setIsEncrypting(true); // ComeÃ§a criptografando
+    setIsEncrypting(true); // Começa com o texto normal
     encryptAndReveal();
 
     return () => {
@@ -74,7 +93,7 @@ const useContinuousCrypticTextAnimation = (text: string, charInterval: number = 
         clearTimeout(animationTimeoutRef.current);
       }
     };
-  }, [charInterval, displayDuration]); // DependÃªncias para re-executar o efeito
+  }, [charInterval, displayDuration]);
 
   return animatedText;
 };
@@ -88,7 +107,7 @@ const AuthPage = () => {
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const tagline = "Seus professores de inteligÃªncia artificial te esperam â";
+  const tagline = "Seus professores de inteligência artificial te esperam ✅";
   const animatedTagline = useContinuousCrypticTextAnimation(tagline);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -127,10 +146,10 @@ const AuthPage = () => {
         <Input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required className="bg-christmas-input text-christmas-dark border-christmas-green placeholder:text-christmas-darker" />
         <Input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="bg-christmas-input text-christmas-dark border-christmas-green placeholder:text-christmas-darker" />
         <Button type="submit" className="w-full bg-christmas-red hover:bg-christmas-red-dark text-white font-semibold shadow-md transition-all duration-300 transform hover:scale-105" disabled={loading}>
-          {loading ? "Noel estÃ¡ a caminho..." : isLogin ? "Entrar" : "Criar conta"}
+          {loading ? "Noel está a caminho..." : isLogin ? "Entrar" : "Criar conta"}
         </Button>
         <p className="text-center text-sm text-christmas-darker">
-          {isLogin ? "NÃ£o tem conta? " : "JÃ¡ tem conta? "}
+          {isLogin ? "Não tem conta? " : "Já tem conta? "}
           <button type="button" className="font-semibold text-christmas-green hover:underline hover:text-christmas-red transition-colors duration-200" onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Criar conta" : "Entrar"}
           </button>

@@ -69,14 +69,37 @@
   }
 }
 
+/* Base christmas-bg from the previous step which was using linear-gradient */
+/* To make it more "system-wide" as requested, we need to apply it more broadly
+   or ensure it covers the entire page. For specific pages, like AuthPage,
+   we can directly apply it. If it's for the very root background,
+   we set it on the body. Let's assume for now AuthPage uses it directly,
+   and for other parts, we'd adjust their specific backgrounds as needed.
+*/
+
 .christmas-bg {
-  background: linear-gradient(135deg, hsl(var(--christmas-red-dark)), hsl(var(--christmas-green))) no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(135deg, hsl(var(--christmas-red-dark)), hsl(var(--christmas-green)));
+  background-size: 200% 200%; /* Make it larger for animation */
   animation: christmasAnimate 20s ease infinite;
 }
 
+
 @keyframes christmasAnimate {
-  0% { background-position: 0% 50%;}
-  50% { background-position: 100% 50%;}
-  100% { background-position: 0% 50%;}
+  0% { background-position: 0% 50%; opacity: 0.9; }
+  25% { background-position: 50% 75%; opacity: 1; }
+  50% { background-position: 100% 50%; opacity: 0.9; }
+  75% { background-position: 50% 25%; opacity: 1; }
+  100% { background-position: 0% 50%; opacity: 0.9; }
+}
+
+/* Rainbow gradient for JTC Parker (if still used on other pages) */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
 }
