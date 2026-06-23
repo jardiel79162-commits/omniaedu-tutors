@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.ensure_direct_chat(uuid, uuid) TO authenticated;

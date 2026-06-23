@@ -1,0 +1,4 @@
+ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
+ALTER TABLE public.profiles REPLICA IDENTITY FULL;
+ALTER TABLE public.posts REPLICA IDENTITY FULL;
+ALTER TABLE public.follows REPLICA IDENTITY FULL;
