@@ -713,7 +713,7 @@ function CreatePostPage() {
       finalizedRef.current = true;
       if (draftId) await deleteDraft(draftId);
       toast.success("Post publicado!");
-      navigate({ to: kind === "reel" ? "/reels" : "/feed" });
+      navigate({ to: kind === "reel" ? "/twos" : "/feed" });
     } catch (e: any) {
       toast.error(e?.message ?? "Erro ao publicar");
       setProgress(0);
