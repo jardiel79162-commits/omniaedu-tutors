@@ -260,7 +260,7 @@ function UserProfilePage() {
           <button
             onClick={() => setTab("reel")}
             className={`flex-1 py-3 grid place-items-center ${tab === "reel" ? "border-t-2 border-primary -mt-px" : "text-muted-foreground"}`}
-            aria-label="Reels"
+            aria-label="TWOS"
           >
             <Film className="h-5 w-5" />
           </button>

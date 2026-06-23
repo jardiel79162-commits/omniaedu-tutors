@@ -538,7 +538,7 @@ function StatusCard() {
       </div>
       <div className="aspect-[4/3] bg-gradient-hero relative grid place-items-center">
         <Camera className="h-7 w-7 text-primary/70" />
-        <span className="absolute bottom-2 left-2 text-[10px] font-semibold bg-background/70 backdrop-blur rounded-full px-2 py-0.5">Reels · 0:12</span>
+        <span className="absolute bottom-2 left-2 text-[10px] font-semibold bg-background/70 backdrop-blur rounded-full px-2 py-0.5">TWOS · 0:12</span>
       </div>
     </div>
   );

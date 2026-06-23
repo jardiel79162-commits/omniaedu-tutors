@@ -46,7 +46,7 @@ export function ProfilePostsGrid({ userId }: { userId: string }) {
     <div className="mt-2 border-t">
       <div className="flex">
         <TabBtn active={tab === "all"} onClick={() => setTab("all")} icon={<LayoutGrid className="h-4 w-4" />} label={`Todos · ${counts.all}`} />
-        <TabBtn active={tab === "reel"} onClick={() => setTab("reel")} icon={<Film className="h-4 w-4" />} label={`Reels · ${counts.reel}`} />
+        <TabBtn active={tab === "reel"} onClick={() => setTab("reel")} icon={<Film className="h-4 w-4" />} label={`TWOS · ${counts.reel}`} />
         <TabBtn active={tab === "photo"} onClick={() => setTab("photo")} icon={<Grid3x3 className="h-4 w-4" />} label={`Posts · ${counts.photo}`} />
       </div>
 
