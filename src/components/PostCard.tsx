@@ -249,7 +249,7 @@ export function PostCard({
               to="/u/$username"
               params={{ username: handle }}
               className="h-9 w-9 rounded-full bg-gradient-brand grid place-items-center text-white font-bold overflow-hidden shrink-0 ring-2"
-              style={{ background: "var(--gradient-brand)", ringColor: "rgba(255,255,255,0.3)" }}
+              style={{ background: "var(--gradient-brand)", ["--tw-ring-color" as any]: "rgba(255,255,255,0.3)" }}
               onClick={(e) => e.stopPropagation()}
             >
               {author?.avatar_url ? (
