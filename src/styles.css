@@ -255,25 +255,23 @@
   border-bottom: 1px solid var(--cosmos-glass-border);
 }
 
-/* ===== Bottom Nav — Floating Pill (Mobile) ===== */
+/* ===== Bottom Nav — Solid Dock (Mobile) ===== */
 .bottom-nav {
   position: fixed;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 2rem);
-  max-width: 420px;
-  background: color-mix(in oklab, var(--color-background) 70%, transparent);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid var(--cosmos-glass-border);
-  border-radius: 9999px;
-  z-index: 40;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: var(--color-background);
+  border-top: 1px solid var(--cosmos-glass-border);
+  z-index: 50;
   padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 8px 32px -8px oklch(0 0 0 / 0.5), 0 0 0 1px var(--cosmos-glass-border), inset 0 1px 0 oklch(1 0 0 / 0.08);
+  box-shadow: 0 -8px 24px -12px oklch(0 0 0 / 0.45);
 }
 .bottom-nav ul {
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.5rem;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 /* ===== Desktop Rail — Floating Pill Column ===== */

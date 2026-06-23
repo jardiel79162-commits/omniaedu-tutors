@@ -22,7 +22,7 @@ function useMuted(): [boolean, (v: boolean) => void] {
   return [value, muteStore.set];
 }
 
-export const Route = createFileRoute("/_authenticated/reels")({
+export const Route = createFileRoute("/_authenticated/twos")({
   component: ReelsPage,
 });
 
@@ -124,7 +124,7 @@ function ReelsPage() {
         <Link to="/feed" className="h-10 w-10 grid place-items-center rounded-full bg-black/40">
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <h1 className="text-lg font-bold">Reels</h1>
+        <h1 className="text-lg font-bold">TWOS</h1>
         <span className="w-10" />
       </header>
 
@@ -181,7 +181,7 @@ function ReelsPage() {
           <button
             onClick={goPrev}
             disabled={activeIndex === 0}
-            aria-label="Reel anterior"
+            aria-label="TWO anterior"
             className="h-12 w-12 rounded-full bg-black/35 hover:bg-black/50 backdrop-blur text-white grid place-items-center disabled:opacity-25 disabled:cursor-not-allowed transition"
           >
             <ChevronUp className="h-6 w-6" />

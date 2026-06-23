@@ -713,7 +713,7 @@ function CreatePostPage() {
       finalizedRef.current = true;
       if (draftId) await deleteDraft(draftId);
       toast.success("Post publicado!");
-      navigate({ to: kind === "reel" ? "/reels" : "/feed" });
+      navigate({ to: kind === "reel" ? "/twos" : "/feed" });
     } catch (e: any) {
       toast.error(e?.message ?? "Erro ao publicar");
       setProgress(0);
@@ -885,7 +885,7 @@ function StepSelect({
             </div>
             <h2 className="text-xl font-extrabold mb-1 tracking-tight">Conte sua história</h2>
             <p className="text-sm text-muted-foreground mb-6">
-              Escolha fotos ou um vídeo. Vídeos viram Reels automaticamente.
+              Escolha fotos ou um vídeo. Vídeos viram TWOS automaticamente.
             </p>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -2396,7 +2396,7 @@ function StepDetails({
       </label>
 
       <div className="rounded-2xl bg-primary/5 border border-primary/20 p-3 text-xs text-muted-foreground">
-        Será publicado como <strong className="text-foreground">{kind === "reel" ? "Reel" : "Post"}</strong> ·{" "}
+        Será publicado como <strong className="text-foreground">{kind === "reel" ? "TWO" : "Post"}</strong> ·{" "}
         {items.length} mídia{items.length > 1 ? "s" : ""} · formato <strong className="text-foreground">{r.id}</strong>.
       </div>
     </div>

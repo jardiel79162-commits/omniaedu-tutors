@@ -482,7 +482,7 @@ function BrandPanel() {
           conexões que importam.
         </h2>
         <p className="mt-5 text-white/80 text-base lg:text-lg max-w-md">
-          Mensagens, status, reels e chamadas — com verificação de identidade e proteção para
+          Mensagens, status, TWOS e chamadas — com verificação de identidade e proteção para
           quem é mais novo.
         </p>
         <div className="mt-8 grid grid-cols-1 gap-3 max-w-md">

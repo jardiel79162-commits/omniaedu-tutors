@@ -23,7 +23,7 @@ export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
 });
 
-const SWIPE_ROUTES = ["/feed", "/reels", "/create", "/chats", "/profile"] as const;
+const SWIPE_ROUTES = ["/feed", "/twos", "/create", "/chats", "/profile"] as const;
 
 function AuthLayout() {
   const loc = useLocation();
@@ -221,7 +221,7 @@ function DesktopRail() {
 
   const items = [
     { to: "/feed",          label: "Feed",       icon: Home },
-    { to: "/reels",         label: "Reels",      icon: Film },
+    { to: "/twos",         label: "TWOS",      icon: Film },
     { to: "/create",        label: "Criar",      icon: PlusSquare },
     { to: "/chats",         label: "Conversas",  icon: MessageSquare },
     { to: "/explore",       label: "Descobrir",  icon: UserPlus },
@@ -493,7 +493,7 @@ function BottomNav() {
 
   const items = [
     { to: "/feed",    label: "Feed",      icon: Home,           badge: 0 },
-    { to: "/reels",   label: "Reels",     icon: Film,           badge: 0 },
+    { to: "/twos",   label: "TWOS",     icon: Film,           badge: 0 },
     { to: "/create",  label: "",          icon: PlusSquare,     badge: 0, isCreate: true },
     { to: "/chats",   label: "Chats",     icon: MessageSquare,  badge: chatsBadge },
     { to: "/profile", label: "Perfil",    icon: User,           badge: 0 },

@@ -13,10 +13,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DownloadRouteImport } from './routes/download'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedTwosRouteImport } from './routes/_authenticated/twos'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
-import { Route as AuthenticatedReelsRouteImport } from './routes/_authenticated/reels'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedPlusRouteImport } from './routes/_authenticated/plus'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
@@ -66,6 +66,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTwosRoute = AuthenticatedTwosRouteImport.update({
+  id: '/twos',
+  path: '/twos',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -79,11 +84,6 @@ const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
 const AuthenticatedSavedRoute = AuthenticatedSavedRouteImport.update({
   id: '/saved',
   path: '/saved',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedReelsRoute = AuthenticatedReelsRouteImport.update({
-  id: '/reels',
-  path: '/reels',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
@@ -258,10 +258,10 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plus': typeof AuthenticatedPlusRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
-  '/reels': typeof AuthenticatedReelsRoute
   '/saved': typeof AuthenticatedSavedRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/twos': typeof AuthenticatedTwosRoute
   '/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
@@ -295,10 +295,10 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plus': typeof AuthenticatedPlusRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
-  '/reels': typeof AuthenticatedReelsRoute
   '/saved': typeof AuthenticatedSavedRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/twos': typeof AuthenticatedTwosRoute
   '/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
@@ -335,10 +335,10 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/plus': typeof AuthenticatedPlusRouteWithChildren
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
-  '/_authenticated/reels': typeof AuthenticatedReelsRoute
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/twos': typeof AuthenticatedTwosRoute
   '/_authenticated/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
   '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
@@ -375,10 +375,10 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/plus'
     | '/profile'
-    | '/reels'
     | '/saved'
     | '/search'
     | '/settings'
+    | '/twos'
     | '/admin/benefits'
     | '/admin/reports'
     | '/admin/security'
@@ -412,10 +412,10 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/plus'
     | '/profile'
-    | '/reels'
     | '/saved'
     | '/search'
     | '/settings'
+    | '/twos'
     | '/admin/benefits'
     | '/admin/reports'
     | '/admin/security'
@@ -451,10 +451,10 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/plus'
     | '/_authenticated/profile'
-    | '/_authenticated/reels'
     | '/_authenticated/saved'
     | '/_authenticated/search'
     | '/_authenticated/settings'
+    | '/_authenticated/twos'
     | '/_authenticated/admin/benefits'
     | '/_authenticated/admin/reports'
     | '/_authenticated/admin/security'
@@ -517,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/twos': {
+      id: '/_authenticated/twos'
+      path: '/twos'
+      fullPath: '/twos'
+      preLoaderRoute: typeof AuthenticatedTwosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -536,13 +543,6 @@ declare module '@tanstack/react-router' {
       path: '/saved'
       fullPath: '/saved'
       preLoaderRoute: typeof AuthenticatedSavedRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/reels': {
-      id: '/_authenticated/reels'
-      path: '/reels'
-      fullPath: '/reels'
-      preLoaderRoute: typeof AuthenticatedReelsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/profile': {
@@ -853,10 +853,10 @@ interface AuthenticatedRouteChildren {
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPlusRoute: typeof AuthenticatedPlusRouteWithChildren
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
-  AuthenticatedReelsRoute: typeof AuthenticatedReelsRoute
   AuthenticatedSavedRoute: typeof AuthenticatedSavedRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedTwosRoute: typeof AuthenticatedTwosRoute
   AuthenticatedPIdRoute: typeof AuthenticatedPIdRoute
   AuthenticatedUUsernameRoute: typeof AuthenticatedUUsernameRouteWithChildren
 }
@@ -871,10 +871,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPlusRoute: AuthenticatedPlusRouteWithChildren,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
-  AuthenticatedReelsRoute: AuthenticatedReelsRoute,
   AuthenticatedSavedRoute: AuthenticatedSavedRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedTwosRoute: AuthenticatedTwosRoute,
   AuthenticatedPIdRoute: AuthenticatedPIdRoute,
   AuthenticatedUUsernameRoute: AuthenticatedUUsernameRouteWithChildren,
 }
