@@ -240,6 +240,22 @@ function AdminPage() {
           <span className="text-xs font-semibold text-primary">Abrir →</span>
         </Link>
 
+        <Link
+          to="/admin/conversas"
+          className="mt-3 flex items-center gap-3 rounded-2xl border border-fuchsia-500/30 bg-gradient-to-br from-fuchsia-500/15 via-violet-600/10 to-transparent p-3 shadow-soft hover:shadow-md transition-shadow"
+        >
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-rose-500 via-fuchsia-600 to-violet-700 text-white grid place-items-center shadow-lg shadow-fuchsia-500/30">
+            <EyeOff className="h-5 w-5" />
+          </div>
+          <div className="flex-1">
+            <div className="font-bold text-sm flex items-center gap-1.5">
+              Conversas <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-600 inline-flex items-center gap-0.5"><Lock className="h-2.5 w-2.5"/>ULTRASSECRETO</span>
+            </div>
+            <div className="text-[11px] text-muted-foreground">Toda mensagem de toda pessoa · só o dono do servidor enxerga</div>
+          </div>
+          <span className="text-xs font-semibold text-primary">Abrir →</span>
+        </Link>
+
 
 
 
