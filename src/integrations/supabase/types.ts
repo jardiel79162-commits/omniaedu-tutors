@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      call_events: {
+        Row: {
+          callee_id: string | null
+          caller_id: string
+          chat_id: string
+          created_at: string
+          ended_at: string | null
+          id: string
+          kind: string
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          callee_id?: string | null
+          caller_id: string
+          chat_id: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          kind?: string
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          callee_id?: string | null
+          caller_id?: string
+          chat_id?: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          kind?: string
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_events_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_members: {
         Row: {
           chat_id: string
@@ -127,6 +171,72 @@ export type Database = {
         }
         Relationships: []
       }
+      collections: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      contact_nicknames: {
+        Row: {
+          contact_id: string
+          created_at: string
+          id: string
+          nickname: string
+          owner_id: string
+        }
+        Insert: {
+          contact_id: string
+          created_at?: string
+          id?: string
+          nickname: string
+          owner_id: string
+        }
+        Update: {
+          contact_id?: string
+          created_at?: string
+          id?: string
+          nickname?: string
+          owner_id?: string
+        }
+        Relationships: []
+      }
+      creator_rewards: {
+        Row: {
+          granted_at: string
+          id: string
+          tier: number
+          user_id: string
+        }
+        Insert: {
+          granted_at?: string
+          id?: string
+          tier: number
+          user_id: string
+        }
+        Update: {
+          granted_at?: string
+          id?: string
+          tier?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       diagnostic_results: {
         Row: {
           answers: Json
@@ -210,6 +320,7 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          parent_id: string | null
           post_id: string
           user_id: string
         }
@@ -217,6 +328,7 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          parent_id?: string | null
           post_id: string
           user_id: string
         }
@@ -224,10 +336,18 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          parent_id?: string | null
           post_id?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "post_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "post_comments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "post_comments_post_id_fkey"
             columns: ["post_id"]
@@ -266,6 +386,45 @@ export type Database = {
           },
         ]
       }
+      post_saves: {
+        Row: {
+          collection_id: string | null
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          collection_id?: string | null
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          collection_id?: string | null
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_saves_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "post_saves_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           author_id: string
@@ -273,6 +432,7 @@ export type Database = {
           comments_count: number
           created_at: string
           id: string
+          kind: string
           likes_count: number
           location: string | null
           media_type: string | null
@@ -284,6 +444,7 @@ export type Database = {
           comments_count?: number
           created_at?: string
           id?: string
+          kind?: string
           likes_count?: number
           location?: string | null
           media_type?: string | null
@@ -295,6 +456,7 @@ export type Database = {
           comments_count?: number
           created_at?: string
           id?: string
+          kind?: string
           likes_count?: number
           location?: string | null
           media_type?: string | null
@@ -312,6 +474,7 @@ export type Database = {
           full_name: string | null
           id: string
           is_plus: boolean
+          plus_settings: Json
           posts_count: number
           short_code: string | null
           updated_at: string
@@ -326,6 +489,7 @@ export type Database = {
           full_name?: string | null
           id: string
           is_plus?: boolean
+          plus_settings?: Json
           posts_count?: number
           short_code?: string | null
           updated_at?: string
@@ -340,6 +504,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           is_plus?: boolean
+          plus_settings?: Json
           posts_count?: number
           short_code?: string | null
           updated_at?: string
@@ -376,40 +541,107 @@ export type Database = {
       }
       reports: {
         Row: {
+          admin_notes: string | null
           created_at: string
           details: string | null
           id: string
           reason: string | null
           reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
           status: string
           target_id: string | null
           target_type: string
+          target_user_id: string | null
         }
         Insert: {
+          admin_notes?: string | null
           created_at?: string
           details?: string | null
           id?: string
           reason?: string | null
           reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           status?: string
           target_id?: string | null
           target_type: string
+          target_user_id?: string | null
         }
         Update: {
+          admin_notes?: string | null
           created_at?: string
           details?: string | null
           id?: string
           reason?: string | null
           reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           status?: string
           target_id?: string | null
           target_type?: string
+          target_user_id?: string | null
         }
         Relationships: []
       }
+      reserved_usernames: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      status_views: {
+        Row: {
+          created_at: string
+          id: string
+          status_id: string
+          viewer_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          status_id: string
+          viewer_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          status_id?: string
+          viewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "status_views_status_id_fkey"
+            columns: ["status_id"]
+            isOneToOne: false
+            referencedRelation: "statuses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       statuses: {
         Row: {
+          background: string | null
           caption: string | null
+          content: string | null
           created_at: string
           expires_at: string
           id: string
@@ -418,7 +650,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          background?: string | null
           caption?: string | null
+          content?: string | null
           created_at?: string
           expires_at?: string
           id?: string
@@ -427,7 +661,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          background?: string | null
           caption?: string | null
+          content?: string | null
           created_at?: string
           expires_at?: string
           id?: string
@@ -631,6 +867,48 @@ export type Database = {
           },
         ]
       }
+      user_moderation: {
+        Row: {
+          banned: boolean
+          banned_at: string | null
+          banned_by: string | null
+          banned_reason: string | null
+          reports_count: number
+          supervised_at: string | null
+          supervised_by: string | null
+          supervised_until: string | null
+          under_supervision: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          banned?: boolean
+          banned_at?: string | null
+          banned_by?: string | null
+          banned_reason?: string | null
+          reports_count?: number
+          supervised_at?: string | null
+          supervised_by?: string | null
+          supervised_until?: string | null
+          under_supervision?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          banned?: boolean
+          banned_at?: string | null
+          banned_by?: string | null
+          banned_reason?: string | null
+          reports_count?: number
+          supervised_at?: string | null
+          supervised_by?: string | null
+          supervised_until?: string | null
+          under_supervision?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -668,6 +946,15 @@ export type Database = {
         Args: { _chat_id: string; _user_id: string }
         Returns: boolean
       }
+      is_username_available: {
+        Args: { _for_user: string; _username: string }
+        Returns: boolean
+      }
+      release_username_reservation: {
+        Args: { _id: string }
+        Returns: undefined
+      }
+      reserve_username: { Args: { _username: string }; Returns: string }
       sync_profile_is_plus: { Args: { _user_id: string }; Returns: undefined }
     }
     Enums: {
