@@ -95,6 +95,7 @@ export type Database = {
           chat_id: string
           content: string | null
           created_at: string
+          duration_ms: number | null
           id: string
           media_url: string | null
           message_type: string
@@ -105,6 +106,7 @@ export type Database = {
           chat_id: string
           content?: string | null
           created_at?: string
+          duration_ms?: number | null
           id?: string
           media_url?: string | null
           message_type?: string
@@ -115,6 +117,7 @@ export type Database = {
           chat_id?: string
           content?: string | null
           created_at?: string
+          duration_ms?: number | null
           id?: string
           media_url?: string | null
           message_type?: string
@@ -134,6 +137,32 @@ export type Database = {
             columns: ["reply_to"]
             isOneToOne: false
             referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_reads: {
+        Row: {
+          chat_id: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          chat_id: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_reads_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
             referencedColumns: ["id"]
           },
         ]
@@ -216,6 +245,33 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_requests: {
+        Row: {
+          created_at: string
+          from_id: string
+          id: string
+          message: string | null
+          status: string
+          to_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_id: string
+          id?: string
+          message?: string | null
+          status?: string
+          to_id: string
+        }
+        Update: {
+          created_at?: string
+          from_id?: string
+          id?: string
+          message?: string | null
+          status?: string
+          to_id?: string
+        }
+        Relationships: []
+      }
       creator_rewards: {
         Row: {
           granted_at: string
@@ -282,6 +338,33 @@ export type Database = {
           follower_id?: string
           following_id?: string
           id?: string
+        }
+        Relationships: []
+      }
+      friendships: {
+        Row: {
+          addressee_id: string
+          created_at: string
+          id: string
+          requester_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          addressee_id: string
+          created_at?: string
+          id?: string
+          requester_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          addressee_id?: string
+          created_at?: string
+          id?: string
+          requester_id?: string
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -357,6 +440,35 @@ export type Database = {
           },
         ]
       }
+      post_hashtags: {
+        Row: {
+          created_at: string
+          hashtag: string
+          id: string
+          post_id: string
+        }
+        Insert: {
+          created_at?: string
+          hashtag: string
+          id?: string
+          post_id: string
+        }
+        Update: {
+          created_at?: string
+          hashtag?: string
+          id?: string
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_hashtags_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_likes: {
         Row: {
           created_at: string
@@ -379,6 +491,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_media: {
+        Row: {
+          created_at: string
+          duration_ms: number | null
+          height: number | null
+          id: string
+          mime: string
+          position: number
+          post_id: string
+          url: string
+          width: number | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms?: number | null
+          height?: number | null
+          id?: string
+          mime?: string
+          position?: number
+          post_id: string
+          url: string
+          width?: number | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number | null
+          height?: number | null
+          id?: string
+          mime?: string
+          position?: number
+          post_id?: string
+          url?: string
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_media_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
@@ -437,6 +593,7 @@ export type Database = {
           location: string | null
           media_type: string | null
           media_url: string | null
+          visibility: string
         }
         Insert: {
           author_id: string
@@ -449,6 +606,7 @@ export type Database = {
           location?: string | null
           media_type?: string | null
           media_url?: string | null
+          visibility?: string
         }
         Update: {
           author_id?: string
@@ -461,11 +619,60 @@ export type Database = {
           location?: string | null
           media_type?: string | null
           media_url?: string | null
+          visibility?: string
         }
         Relationships: []
       }
+      product_links: {
+        Row: {
+          created_at: string
+          id: string
+          label: string | null
+          logo_url: string | null
+          media_position: number
+          post_id: string
+          size: number
+          url: string
+          x: number
+          y: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label?: string | null
+          logo_url?: string | null
+          media_position?: number
+          post_id: string
+          size?: number
+          url: string
+          x?: number
+          y?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string | null
+          logo_url?: string | null
+          media_position?: number
+          post_id?: string
+          size?: number
+          url?: string
+          x?: number
+          y?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_links_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
+          about: string | null
           avatar_url: string | null
           bio: string | null
           created_at: string
@@ -481,6 +688,7 @@ export type Database = {
           username: string | null
         }
         Insert: {
+          about?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -496,6 +704,7 @@ export type Database = {
           username?: string | null
         }
         Update: {
+          about?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -608,6 +817,48 @@ export type Database = {
         }
         Relationships: []
       }
+      security_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          ip: string | null
+          message: string | null
+          metadata: Json
+          risk_score: number
+          route: string | null
+          severity: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          ip?: string | null
+          message?: string | null
+          metadata?: Json
+          risk_score?: number
+          route?: string | null
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          ip?: string | null
+          message?: string | null
+          metadata?: Json
+          risk_score?: number
+          route?: string | null
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       status_views: {
         Row: {
           created_at: string
@@ -716,6 +967,7 @@ export type Database = {
         Row: {
           created_at: string
           current_period_end: string | null
+          mp_payment_id: string | null
           plan: string
           provider: string | null
           provider_ref: string | null
@@ -726,6 +978,7 @@ export type Database = {
         Insert: {
           created_at?: string
           current_period_end?: string | null
+          mp_payment_id?: string | null
           plan?: string
           provider?: string | null
           provider_ref?: string | null
@@ -736,6 +989,7 @@ export type Database = {
         Update: {
           created_at?: string
           current_period_end?: string | null
+          mp_payment_id?: string | null
           plan?: string
           provider?: string | null
           provider_ref?: string | null
@@ -949,6 +1203,18 @@ export type Database = {
       is_username_available: {
         Args: { _for_user: string; _username: string }
         Returns: boolean
+      }
+      log_security_event: {
+        Args: {
+          _event_type: string
+          _message?: string
+          _metadata?: Json
+          _risk_score?: number
+          _route?: string
+          _severity?: string
+          _user_agent?: string
+        }
+        Returns: undefined
       }
       release_username_reservation: {
         Args: { _id: string }
