@@ -38,6 +38,7 @@ import { Route as AuthenticatedGroupsNewRouteImport } from './routes/_authentica
 import { Route as AuthenticatedChatsIdRouteImport } from './routes/_authenticated/chats.$id'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authenticated/admin.reports'
+import { Route as AuthenticatedAdminConversasRouteImport } from './routes/_authenticated/admin.conversas'
 import { Route as AuthenticatedAdminBenefitsRouteImport } from './routes/_authenticated/admin.benefits'
 import { Route as ApiPublicDownloadWindowsRouteImport } from './routes/api/public/download.windows'
 import { Route as AuthenticatedUUsernameFollowingRouteImport } from './routes/_authenticated/u.$username.following'
@@ -197,6 +198,12 @@ const AuthenticatedAdminReportsRoute =
     path: '/reports',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminConversasRoute =
+  AuthenticatedAdminConversasRouteImport.update({
+    id: '/conversas',
+    path: '/conversas',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminBenefitsRoute =
   AuthenticatedAdminBenefitsRouteImport.update({
     id: '/benefits',
@@ -263,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/twos': typeof AuthenticatedTwosRoute
   '/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
+  '/admin/conversas': typeof AuthenticatedAdminConversasRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/chats/$id': typeof AuthenticatedChatsIdRoute
@@ -300,6 +308,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/twos': typeof AuthenticatedTwosRoute
   '/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
+  '/admin/conversas': typeof AuthenticatedAdminConversasRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/chats/$id': typeof AuthenticatedChatsIdRoute
@@ -340,6 +349,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/twos': typeof AuthenticatedTwosRoute
   '/_authenticated/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
+  '/_authenticated/admin/conversas': typeof AuthenticatedAdminConversasRoute
   '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/chats/$id': typeof AuthenticatedChatsIdRoute
@@ -380,6 +390,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/twos'
     | '/admin/benefits'
+    | '/admin/conversas'
     | '/admin/reports'
     | '/admin/security'
     | '/chats/$id'
@@ -417,6 +428,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/twos'
     | '/admin/benefits'
+    | '/admin/conversas'
     | '/admin/reports'
     | '/admin/security'
     | '/chats/$id'
@@ -456,6 +468,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/twos'
     | '/_authenticated/admin/benefits'
+    | '/_authenticated/admin/conversas'
     | '/_authenticated/admin/reports'
     | '/_authenticated/admin/security'
     | '/_authenticated/chats/$id'
@@ -692,6 +705,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReportsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/conversas': {
+      id: '/_authenticated/admin/conversas'
+      path: '/conversas'
+      fullPath: '/admin/conversas'
+      preLoaderRoute: typeof AuthenticatedAdminConversasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/benefits': {
       id: '/_authenticated/admin/benefits'
       path: '/benefits'
@@ -753,6 +773,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminBenefitsRoute: typeof AuthenticatedAdminBenefitsRoute
+  AuthenticatedAdminConversasRoute: typeof AuthenticatedAdminConversasRoute
   AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -762,6 +783,7 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBenefitsRoute: AuthenticatedAdminBenefitsRoute,
+  AuthenticatedAdminConversasRoute: AuthenticatedAdminConversasRoute,
   AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
