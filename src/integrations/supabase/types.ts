@@ -170,6 +170,7 @@ export type Database = {
       chats: {
         Row: {
           avatar_url: string | null
+          bio: string | null
           created_at: string
           created_by: string | null
           id: string
@@ -180,6 +181,7 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -190,6 +192,7 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -368,6 +371,24 @@ export type Database = {
         }
         Relationships: []
       }
+      hashtags: {
+        Row: {
+          tag: string
+          updated_at: string
+          uses_count: number
+        }
+        Insert: {
+          tag: string
+          updated_at?: string
+          uses_count?: number
+        }
+        Update: {
+          tag?: string
+          updated_at?: string
+          uses_count?: number
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           actor_id: string | null
@@ -375,6 +396,8 @@ export type Database = {
           id: string
           payload: Json
           read: boolean
+          read_at: string | null
+          target_id: string | null
           type: string
           user_id: string
         }
@@ -384,6 +407,8 @@ export type Database = {
           id?: string
           payload?: Json
           read?: boolean
+          read_at?: string | null
+          target_id?: string | null
           type: string
           user_id: string
         }
@@ -393,6 +418,8 @@ export type Database = {
           id?: string
           payload?: Json
           read?: boolean
+          read_at?: string | null
+          target_id?: string | null
           type?: string
           user_id?: string
         }
@@ -443,21 +470,21 @@ export type Database = {
       post_hashtags: {
         Row: {
           created_at: string
-          hashtag: string
           id: string
           post_id: string
+          tag: string
         }
         Insert: {
           created_at?: string
-          hashtag: string
           id?: string
           post_id: string
+          tag: string
         }
         Update: {
           created_at?: string
-          hashtag?: string
           id?: string
           post_id?: string
+          tag?: string
         }
         Relationships: [
           {
