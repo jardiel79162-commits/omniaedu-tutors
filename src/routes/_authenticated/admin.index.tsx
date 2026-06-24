@@ -16,7 +16,7 @@ import {
 import {
   Shield, Search, AlertTriangle, Crown, Copy, LogOut, RefreshCw,
   Users, MessageSquare, FileText, Activity, UserPlus, Sparkles,
-  Trash2, ShieldOff, ShieldCheck, MoreVertical,
+  Trash2, ShieldOff, ShieldCheck, MoreVertical, EyeOff, Lock,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";

@@ -47,6 +47,7 @@ import { Route as AuthenticatedPlusPersonalizarCatRouteImport } from './routes/_
 import { Route as AuthenticatedGroupsIdEditRouteImport } from './routes/_authenticated/groups.$id.edit'
 import { Route as AuthenticatedAdminUIdRouteImport } from './routes/_authenticated/admin.u.$id'
 import { Route as AuthenticatedAdminInspectIdRouteImport } from './routes/_authenticated/admin.inspect.$id'
+import { Route as AuthenticatedAdminConversasChatIdRouteImport } from './routes/_authenticated/admin.conversas.$chatId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -251,6 +252,12 @@ const AuthenticatedAdminInspectIdRoute =
     path: '/inspect/$id',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminConversasChatIdRoute =
+  AuthenticatedAdminConversasChatIdRouteImport.update({
+    id: '/$chatId',
+    path: '/$chatId',
+    getParentRoute: () => AuthenticatedAdminConversasRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -270,7 +277,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/twos': typeof AuthenticatedTwosRoute
   '/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
-  '/admin/conversas': typeof AuthenticatedAdminConversasRoute
+  '/admin/conversas': typeof AuthenticatedAdminConversasRouteWithChildren
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/chats/$id': typeof AuthenticatedChatsIdRoute
@@ -283,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/api/public/admin-bootstrap': typeof ApiPublicAdminBootstrapRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/conversas/$chatId': typeof AuthenticatedAdminConversasChatIdRoute
   '/admin/inspect/$id': typeof AuthenticatedAdminInspectIdRoute
   '/admin/u/$id': typeof AuthenticatedAdminUIdRoute
   '/groups/$id/edit': typeof AuthenticatedGroupsIdEditRoute
@@ -308,7 +316,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/twos': typeof AuthenticatedTwosRoute
   '/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
-  '/admin/conversas': typeof AuthenticatedAdminConversasRoute
+  '/admin/conversas': typeof AuthenticatedAdminConversasRouteWithChildren
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/chats/$id': typeof AuthenticatedChatsIdRoute
@@ -321,6 +329,7 @@ export interface FileRoutesByTo {
   '/api/public/admin-bootstrap': typeof ApiPublicAdminBootstrapRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/conversas/$chatId': typeof AuthenticatedAdminConversasChatIdRoute
   '/admin/inspect/$id': typeof AuthenticatedAdminInspectIdRoute
   '/admin/u/$id': typeof AuthenticatedAdminUIdRoute
   '/groups/$id/edit': typeof AuthenticatedGroupsIdEditRoute
@@ -349,7 +358,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/twos': typeof AuthenticatedTwosRoute
   '/_authenticated/admin/benefits': typeof AuthenticatedAdminBenefitsRoute
-  '/_authenticated/admin/conversas': typeof AuthenticatedAdminConversasRoute
+  '/_authenticated/admin/conversas': typeof AuthenticatedAdminConversasRouteWithChildren
   '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/chats/$id': typeof AuthenticatedChatsIdRoute
@@ -362,6 +371,7 @@ export interface FileRoutesById {
   '/api/public/admin-bootstrap': typeof ApiPublicAdminBootstrapRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/conversas/$chatId': typeof AuthenticatedAdminConversasChatIdRoute
   '/_authenticated/admin/inspect/$id': typeof AuthenticatedAdminInspectIdRoute
   '/_authenticated/admin/u/$id': typeof AuthenticatedAdminUIdRoute
   '/_authenticated/groups/$id/edit': typeof AuthenticatedGroupsIdEditRoute
@@ -403,6 +413,7 @@ export interface FileRouteTypes {
     | '/api/public/admin-bootstrap'
     | '/api/public/mp-webhook'
     | '/admin/'
+    | '/admin/conversas/$chatId'
     | '/admin/inspect/$id'
     | '/admin/u/$id'
     | '/groups/$id/edit'
@@ -441,6 +452,7 @@ export interface FileRouteTypes {
     | '/api/public/admin-bootstrap'
     | '/api/public/mp-webhook'
     | '/admin'
+    | '/admin/conversas/$chatId'
     | '/admin/inspect/$id'
     | '/admin/u/$id'
     | '/groups/$id/edit'
@@ -481,6 +493,7 @@ export interface FileRouteTypes {
     | '/api/public/admin-bootstrap'
     | '/api/public/mp-webhook'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/conversas/$chatId'
     | '/_authenticated/admin/inspect/$id'
     | '/_authenticated/admin/u/$id'
     | '/_authenticated/groups/$id/edit'
@@ -768,12 +781,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminInspectIdRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/conversas/$chatId': {
+      id: '/_authenticated/admin/conversas/$chatId'
+      path: '/$chatId'
+      fullPath: '/admin/conversas/$chatId'
+      preLoaderRoute: typeof AuthenticatedAdminConversasChatIdRouteImport
+      parentRoute: typeof AuthenticatedAdminConversasRoute
+    }
   }
 }
 
+interface AuthenticatedAdminConversasRouteChildren {
+  AuthenticatedAdminConversasChatIdRoute: typeof AuthenticatedAdminConversasChatIdRoute
+}
+
+const AuthenticatedAdminConversasRouteChildren: AuthenticatedAdminConversasRouteChildren =
+  {
+    AuthenticatedAdminConversasChatIdRoute:
+      AuthenticatedAdminConversasChatIdRoute,
+  }
+
+const AuthenticatedAdminConversasRouteWithChildren =
+  AuthenticatedAdminConversasRoute._addFileChildren(
+    AuthenticatedAdminConversasRouteChildren,
+  )
+
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminBenefitsRoute: typeof AuthenticatedAdminBenefitsRoute
-  AuthenticatedAdminConversasRoute: typeof AuthenticatedAdminConversasRoute
+  AuthenticatedAdminConversasRoute: typeof AuthenticatedAdminConversasRouteWithChildren
   AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -783,7 +818,8 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBenefitsRoute: AuthenticatedAdminBenefitsRoute,
-  AuthenticatedAdminConversasRoute: AuthenticatedAdminConversasRoute,
+  AuthenticatedAdminConversasRoute:
+    AuthenticatedAdminConversasRouteWithChildren,
   AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
