@@ -409,3 +409,183 @@ export const adminResetPassword = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// ============================================================
+// 🔒 ULTRA-SECRET — Visão total de TODAS as conversas
+// Só executa via servidor com a chave de serviço.
+// O acesso é gateado por assertAdmin (env JTC_ADMIN_EMAIL).
+// ============================================================
+
+export type AdminChatListItem = {
+  id: string;
+  type: string;
+  name: string | null;
+  avatar_url: string | null;
+  last_message: string | null;
+  last_message_at: string | null;
+  created_at: string | null;
+  members_count: number;
+  messages_count: number;
+  members: {
+    id: string;
+    full_name: string | null;
+    username: string | null;
+    avatar_url: string | null;
+  }[];
+};
+
+export const adminListAllChats = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { search?: string; limit?: number } | undefined) => input ?? {})
+  .handler(async ({ data, context }): Promise<AdminChatListItem[]> => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const limit = Math.min(Math.max(data.limit ?? 200, 1), 500);
+
+    const { data: chats, error } = await supabaseAdmin
+      .from("chats")
+      .select("id,type,name,avatar_url,last_message,last_message_at,created_at")
+      .order("last_message_at", { ascending: false, nullsFirst: false })
+      .limit(limit);
+    if (error) throw new Error(error.message);
+    const list = chats ?? [];
+    if (!list.length) return [];
+
+    const ids = list.map((c: any) => c.id);
+    const [{ data: members }, msgCounts] = await Promise.all([
+      supabaseAdmin
+        .from("chat_members")
+        .select("chat_id,user_id, profiles!inner(id,full_name,username,avatar_url)")
+        .in("chat_id", ids),
+      Promise.all(
+        ids.map((id) =>
+          supabaseAdmin
+            .from("chat_messages")
+            .select("id", { count: "exact", head: true })
+            .eq("chat_id", id)
+            .then((r) => ({ id, count: r.count ?? 0 })),
+        ),
+      ),
+    ]);
+
+    const msgMap = new Map(msgCounts.map((m) => [m.id, m.count]));
+    const memberMap = new Map<string, AdminChatListItem["members"]>();
+    (members ?? []).forEach((m: any) => {
+      const arr = memberMap.get(m.chat_id) ?? [];
+      if (m.profiles) {
+        arr.push({
+          id: m.profiles.id,
+          full_name: m.profiles.full_name,
+          username: m.profiles.username,
+          avatar_url: m.profiles.avatar_url,
+        });
+      }
+      memberMap.set(m.chat_id, arr);
+    });
+
+    const rows: AdminChatListItem[] = list.map((c: any) => {
+      const ms = memberMap.get(c.id) ?? [];
+      return {
+        id: c.id,
+        type: c.type,
+        name: c.name,
+        avatar_url: c.avatar_url,
+        last_message: c.last_message,
+        last_message_at: c.last_message_at,
+        created_at: c.created_at,
+        members_count: ms.length,
+        messages_count: msgMap.get(c.id) ?? 0,
+        members: ms,
+      };
+    });
+
+    const search = (data.search ?? "").trim().toLowerCase();
+    if (!search) return rows;
+    return rows.filter((r) => {
+      if (r.name && r.name.toLowerCase().includes(search)) return true;
+      if (r.last_message && r.last_message.toLowerCase().includes(search)) return true;
+      return r.members.some(
+        (m) =>
+          (m.full_name ?? "").toLowerCase().includes(search) ||
+          (m.username ?? "").toLowerCase().includes(search),
+      );
+    });
+  });
+
+export type AdminChatThreadMessage = {
+  id: string;
+  chat_id: string;
+  sender_id: string;
+  content: string | null;
+  message_type: string;
+  media_url: string | null;
+  duration_ms: number | null;
+  created_at: string;
+  sender: {
+    id: string;
+    full_name: string | null;
+    username: string | null;
+    avatar_url: string | null;
+  } | null;
+};
+
+export type AdminChatThread = {
+  chat: AdminChatListItem;
+  messages: AdminChatThreadMessage[];
+};
+
+export const adminGetChatThread = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { chatId: string; limit?: number }) => input)
+  .handler(async ({ data, context }): Promise<AdminChatThread> => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const limit = Math.min(Math.max(data.limit ?? 500, 1), 2000);
+
+    const { data: chat, error: cErr } = await supabaseAdmin
+      .from("chats")
+      .select("id,type,name,avatar_url,last_message,last_message_at,created_at")
+      .eq("id", data.chatId)
+      .maybeSingle();
+    if (cErr) throw new Error(cErr.message);
+    if (!chat) throw new Error("Conversa não encontrada");
+
+    const [{ data: members }, { data: messages, error: mErr }] = await Promise.all([
+      supabaseAdmin
+        .from("chat_members")
+        .select("user_id, profiles!inner(id,full_name,username,avatar_url)")
+        .eq("chat_id", data.chatId),
+      supabaseAdmin
+        .from("chat_messages")
+        .select("id,chat_id,sender_id,content,message_type,media_url,duration_ms,created_at")
+        .eq("chat_id", data.chatId)
+        .order("created_at", { ascending: true })
+        .limit(limit),
+    ]);
+    if (mErr) throw new Error(mErr.message);
+
+    const memberList = (members ?? [])
+      .map((m: any) => m.profiles)
+      .filter(Boolean) as AdminChatListItem["members"];
+    const senderMap = new Map(memberList.map((p) => [p.id, p]));
+
+    return {
+      chat: {
+        id: chat.id,
+        type: chat.type,
+        name: chat.name,
+        avatar_url: chat.avatar_url,
+        last_message: chat.last_message,
+        last_message_at: chat.last_message_at,
+        created_at: chat.created_at,
+        members_count: memberList.length,
+        messages_count: (messages ?? []).length,
+        members: memberList,
+      },
+      messages: (messages ?? []).map((m: any) => ({
+        ...m,
+        sender: senderMap.get(m.sender_id) ?? null,
+      })),
+    };
+  });
+
